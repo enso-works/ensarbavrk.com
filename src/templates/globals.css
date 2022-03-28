@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer {
+  @font-face {
+    font-family: 'Quattrocento Sans';
+    src: url('/fonts/Quattrocento Sans.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+  }
+}
+
+#__next {
+  @apply h-full flex flex-1 justify-center;
+}
