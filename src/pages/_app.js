@@ -1,5 +1,5 @@
-import '../src/templates/globals.css';
-import { PageTemplate } from '../src/templates/PageTemplate';
+import '../templates/globals.css';
+import { PageTemplate } from '../templates/PageTemplate';
 
 const App = ({ Component, pageProps }) => {
   return (
