@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  @apply light;
+}
+
+.dark {
+  --color-bg-primary: #313131;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #edf2f7;
+  --color-text-accent: #00a7dc;
+}
+
+.light {
+  --color-bg-primary: #fff;
+  --color-text-primary: #000000;
+  --color-text-secondary: #464646;
+  --color-text-accent: #00a7dc;
+}
+
 @layer {
   @font-face {
     font-family: 'Quattrocento Sans';
@@ -13,5 +31,5 @@
 }
 
 #__next {
-  @apply h-full flex flex-1 justify-center;
+  @apply h-full flex flex-1 justify-center transition ease-in duration-300 bg-bgPrimary;
 }

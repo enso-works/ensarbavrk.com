@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavBar } from '../molecules';
+import { NavBar } from '../organisms';
 import style from './PageTemplate.module.scss';
 
 export const PageTemplate = ({ children }) => {

@@ -1,0 +1,8 @@
+.icon {
+  path {
+    @apply fill-text;
+  }
+  &:hover path {
+    @apply fill-primary;
+  }
+}

@@ -1,10 +1,14 @@
 module.exports = {
   content: [],
+  mode: 'jit',
+  purge: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
-        primary: '#00A7DC',
-        lightBlack: '#464646',
+        primary: 'var(--color-text-accent)',
+        bgPrimary: 'var(--color-bg-primary)',
+        text: 'var(--color-text-primary)',
+        textSecondary: 'var(--color-text-primary)',
       },
     },
     fontFamily: {

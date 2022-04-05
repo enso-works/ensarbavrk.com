@@ -1,26 +1,30 @@
 import * as React from 'react';
-import { BlogLink, Signature } from '../../atoms';
+import { Command } from '../../atoms';
+import { CommandIcon, Signature, SunIcon } from '../../atoms/icons';
 import styles from './Navbar.module.scss';
+import { useDarkMode } from '../../lib/useDarkMode';
 
 export const NavBar = () => {
+  const [enabled, setEnabled] = useDarkMode();
   return (
     <nav className={styles.navbar}>
-      <BlogLink pathTo={'/'}>
+      <Command.Link pathTo={'/'}>
         <Signature />
-      </BlogLink>
+      </Command.Link>
       <ul>
-        <li>
-          <BlogLink pathTo={'/'}>Home</BlogLink>
-        </li>
-        <li>
-          <BlogLink pathTo={'/blog'}>Blog</BlogLink>
-        </li>
-        <li>
-          <BlogLink pathTo={'/login'}>Login</BlogLink>
-        </li>
-        <li>
-          <BlogLink pathTo={'/about'}>About</BlogLink>
-        </li>
+        <Command.LinkInList pathTo={'/'}>Home</Command.LinkInList>
+        <Command.LinkInList pathTo={'/blog'}>Blog</Command.LinkInList>
+        <Command.LinkInList pathTo={'/login'}>Login</Command.LinkInList>
+        <Command.LinkInList pathTo={'/about'}>About</Command.LinkInList>
+        <Command.ButtonInList
+          onClick={() => {
+            setEnabled(!enabled);
+          }}>
+          <SunIcon />
+        </Command.ButtonInList>
+        <Command.ButtonInList>
+          <CommandIcon />
+        </Command.ButtonInList>
       </ul>
     </nav>
   );
