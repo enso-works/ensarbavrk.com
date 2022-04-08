@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Command } from '../../atoms';
 import { CommandIcon, Signature, SunIcon } from '../../atoms/icons';
 import styles from './Navbar.module.scss';
-import { useDarkMode } from '../../lib/useDarkMode';
+import { useToggleDarkMode } from '../../lib/useDarkMode';
 
 export const NavBar = () => {
-  const [enabled, setEnabled] = useDarkMode();
+  const toggle = useToggleDarkMode();
   return (
     <nav className={styles.navbar}>
       <Command.Link pathTo={'/'}>
@@ -16,10 +16,7 @@ export const NavBar = () => {
         <Command.LinkInList pathTo={'/blog'}>Blog</Command.LinkInList>
         <Command.LinkInList pathTo={'/login'}>Login</Command.LinkInList>
         <Command.LinkInList pathTo={'/about'}>About</Command.LinkInList>
-        <Command.ButtonInList
-          onClick={() => {
-            setEnabled(!enabled);
-          }}>
+        <Command.ButtonInList onClick={() => toggle()}>
           <SunIcon />
         </Command.ButtonInList>
         <Command.ButtonInList>

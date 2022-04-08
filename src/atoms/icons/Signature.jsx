@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { memo } from 'react';
 
-export const Signature = ({ width = 100, height = 32 }) => {
+const SignatureIcon = ({ width = 100, height = 32 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -83,3 +84,7 @@ export const Signature = ({ width = 100, height = 32 }) => {
     </svg>
   );
 };
+
+export const Signature = memo(SignatureIcon);
+Signature.displayName = 'Signature';
+

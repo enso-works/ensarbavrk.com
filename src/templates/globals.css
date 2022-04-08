@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  @apply light;
+  @apply light text-text;
 }
 
 .dark {
@@ -31,5 +31,5 @@
 }
 
 #__next {
-  @apply h-full flex flex-1 justify-center transition ease-in duration-300 bg-bgPrimary;
+  @apply h-full flex flex-1 justify-center bg-bgPrimary;
 }
