@@ -1,74 +1,116 @@
-import { useEffect } from 'react';
-const systemMode = 'system';
-const darkModeKey = 'dark-mode';
-const lightModeClass = 'light';
-const darkModeClass = 'dark';
-const storageEvent = 'STORAGE_EVENT';
+import { useEffect, useState } from 'react';
+import Script from 'next/script';
+
+const DARK_MODE_KEY = 'blog-theme';
+const LIGHT_MODE_CLASS_NAME = 'light';
+const DARK_MODE_CLASS_NAME = 'dark';
+
+const isSystemDarkMode = () =>
+  window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 const switchDarkModeClasses = (classValue) => {
   const root = window.document.documentElement;
-  root.classList.add(classValue);
+
   root.classList.remove(
-    classValue === darkModeClass ? lightModeClass : darkModeClass
+    classValue === DARK_MODE_CLASS_NAME
+      ? LIGHT_MODE_CLASS_NAME
+      : DARK_MODE_CLASS_NAME
   );
+  root.classList.add(classValue);
 };
 
-const setupTransitionClass = (isDarkMode) => {
+const setupTransitionClass = () => {
   const documentDiv = document.querySelector('#__next');
-  if (
-    !documentDiv.classList.contains('transition') &&
-    isDarkMode !== systemMode
-  ) {
+  if (!documentDiv.classList.contains('transition')) {
     documentDiv.classList.add('transition', 'ease-in', 'duration-200');
   }
 };
 
 export const useToggleDarkMode = () => {
-  return () => {
-    const event = new Event(storageEvent);
-    const darkMode = window.localStorage.getItem(darkModeKey);
+  const [shouldToggle, setToggle] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(
+    ~(() => {
+      if (typeof window !== 'undefined') {
+        const root = window.document.documentElement;
+        return root.classList.contains(DARK_MODE_CLASS_NAME);
+      } else {
+        return false;
+      }
+    })()
+  );
 
-    event.key = darkModeKey;
-    event.value = darkMode;
-    window.dispatchEvent(event);
+  useEffect(() => {
+    // if init mode avoid switching themes
+    if (shouldToggle !== null) {
+      const storedMode = window.localStorage.getItem(DARK_MODE_KEY);
+      const newModeSelected =
+        storedMode === DARK_MODE_CLASS_NAME
+          ? LIGHT_MODE_CLASS_NAME
+          : DARK_MODE_CLASS_NAME;
 
-    window.localStorage.setItem(
-      darkModeKey,
-      darkMode === darkModeClass ? lightModeClass : darkModeClass
-    );
-  };
+      try {
+        window.localStorage.setItem(DARK_MODE_KEY, newModeSelected);
+        switchDarkModeClasses(newModeSelected);
+        setIsDarkMode(newModeSelected === DARK_MODE_CLASS_NAME);
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      const root = window.document.documentElement;
+      setIsDarkMode(root.classList.contains(DARK_MODE_CLASS_NAME));
+    }
+  }, [shouldToggle]);
+
+  return [
+    () => {
+      setToggle((prev) => !prev);
+    },
+    isDarkMode,
+  ];
 };
 
 export const useDarkMode = () => {
   useEffect(() => {
-    // check if we heave transition class
-    setupTransitionClass();
-    //if we delete this key it should reset to the system
-    const eventHandler = ({ kenewValue }) => {
-      if (![darkModeClass, lightModeClass, systemMode].includes(kenewValue)) {
-        window.localStorage.setItem(darkModeKey, systemMode);
-      }
-
-      if (kenewValue === systemMode) {
-        const prefersDarkMode = window.matchMedia(
-          '(prefers-color-scheme: dark)'
-        ).matches;
-
-        window.localStorage.setItem(
-          darkModeKey,
-          prefersDarkMode ? darkModeClass : lightModeClass
-        );
+    const storageEvent = (event) => {
+      const { newValue } = event;
+      if (![DARK_MODE_CLASS_NAME, LIGHT_MODE_CLASS_NAME].includes(newValue)) {
+        const newMode = isSystemDarkMode()
+          ? DARK_MODE_CLASS_NAME
+          : LIGHT_MODE_CLASS_NAME;
+        window.localStorage.setItem(DARK_MODE_KEY, newMode);
+        switchDarkModeClasses(newMode);
+      } else {
+        switchDarkModeClasses(newValue);
       }
     };
-    //handler for user changed mode.
-    window.addEventListener(
-      storageEvent,
-      ({ value }) => {
-        switchDarkModeClasses(value);
-      },
-      false
-    );
-    window.addEventListener('storage', eventHandler);
-    return () => window.removeEventListener('storage', eventHandler);
+    window.addEventListener('storage', storageEvent);
+
+    setupTransitionClass();
+    return () => window.removeEventListener('storage', storageEvent);
   }, []);
+};
+
+const initDarkMode = () => `
+  const darkMode = localStorage.getItem('blog-theme');
+  const root = document.documentElement;
+  const isUserPrefDarkMode = window.matchMedia('(prefers-color-scheme: dark)')
+    .matches;
+  
+  if(['dark', 'light'].includes(darkMode)){
+    root.classList.add(darkMode);
+  } else {
+    root.classList.add(isUserPrefDarkMode ? 'dark' : 'light');
+  }
+`;
+
+export const DarkModeInitializerScript = () => {
+  return (
+    <Script
+      id={'dark-mode-initializer'}
+      strategy="beforeInteractive"
+      src={`data:text/javascript;base64,${Buffer.from(initDarkMode()).toString(
+        'base64'
+      )}`}
+    />
+  );
 };

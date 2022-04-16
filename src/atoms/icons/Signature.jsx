@@ -87,4 +87,3 @@ const SignatureIcon = ({ width = 100, height = 32 }) => {
 
 export const Signature = memo(SignatureIcon);
 Signature.displayName = 'Signature';
-
