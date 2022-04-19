@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { getAllPosts } from '../../lib';
 import Image from 'next/image';
-import { BlogPageHeading } from '../../molecules';
-import { BlogSummaryCard } from '../../organisms';
+import { BlogPageHeading } from '@/molecules/BlogPageHeading';
+import { BlogSummaryCard } from '@/organisms/BlogSummaryCard';
 
 export default function Index({ posts }) {
   return (

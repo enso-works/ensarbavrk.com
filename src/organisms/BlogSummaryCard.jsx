@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Image from 'next/image';
-import { H2, P, Small } from '../../atoms';
+import { H2, P, Small } from '@/atoms/typography';
 
 export const BlogSummaryCard = ({ meta }) => {
   return (

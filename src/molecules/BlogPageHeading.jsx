@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { H1 } from '../atoms';
+import { H1 } from '@/atoms/Typography';
 
 export const BlogPageHeading = ({}) => {
   return (

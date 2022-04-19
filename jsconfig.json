@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@/atoms/*": ["atoms/*"],
+      "@/lib/*": ["lib/*"],
+      "@/molecules/*": ["molecules/*"],
+      "@/organisms/*": ["organisms/*"]
+    }
+  }
+}
