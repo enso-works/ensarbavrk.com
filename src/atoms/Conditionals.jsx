@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Children } from 'react';
 
 export const IF = ({ predicate, children }) => {
-  return <>{predicate ? <>{Children.only(children)}</> : []}</>;
+  return <>{predicate ? Children.only(children) : []}</>;
 };
 
 export const IF_Else = ({ predicate, children }) => {

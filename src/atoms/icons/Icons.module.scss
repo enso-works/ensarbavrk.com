@@ -6,3 +6,9 @@
     @apply fill-primary;
   }
 }
+
+.gray-icon {
+  path {
+    @apply fill-gray-500;
+  }
+}

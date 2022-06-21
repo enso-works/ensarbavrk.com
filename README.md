@@ -22,4 +22,10 @@ npm run dev
 yarn dev
 ```
 
-## It's not yet Deployed :)
+## Project Design 
+
+it uses atomic design system to build the site, more about it [here - what is atomic desing](https://atomicdesign.bradfrost.com/).
+
+some custom components are:
+- [📚] Command pallet command(ctrl)+k with keyboard navigation 
+- [☀️] Light and Dark mode toggle custom NextJS component 

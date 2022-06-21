@@ -7,6 +7,8 @@ module.exports = {
         bgPrimary: 'var(--color-bg-primary)',
         text: 'var(--color-text-primary)',
         textSecondary: 'var(--color-text-primary)',
+        black: '#313131',
+        white: '#ffffff',
       },
     },
     fontFamily: {

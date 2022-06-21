@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getAllPosts } from '../../lib';
+import { getAllPosts } from '@/lib/postsApi';
 import Image from 'next/image';
 import { BlogPageHeading } from '@/molecules/BlogPageHeading';
 import { BlogSummaryCard } from '@/organisms/BlogSummaryCard';

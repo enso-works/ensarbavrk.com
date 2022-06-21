@@ -4,9 +4,12 @@ import { Command } from '@/atoms/command/Command';
 import { CommandIcon, MoonIcon, Signature, SunIcon } from '@/atoms/icons';
 import { useToggleDarkMode } from '@/lib/useDarkMode';
 import styles from './Navbar.module.scss';
+import { useContext } from 'react';
+import { CommandEventTypes, KeyboardEventContext } from '@/lib/keyboardService';
 
 export const NavBar = () => {
   const [toggle, isDarkMode] = useToggleDarkMode();
+  const { resetKeyPress } = useContext(KeyboardEventContext);
 
   return (
     <nav className={styles.navbar}>
@@ -24,7 +27,10 @@ export const NavBar = () => {
             <MoonIcon />
           </IF_Else>
         </Command.ButtonInList>
-        <Command.ButtonInList>
+        <Command.ButtonInList
+          onClick={() => {
+            resetKeyPress(CommandEventTypes.COMMAND_PLATE_OPEN_PRESS);
+          }}>
           <CommandIcon />
         </Command.ButtonInList>
       </ul>
