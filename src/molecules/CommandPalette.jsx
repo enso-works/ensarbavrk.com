@@ -29,18 +29,20 @@ const BlogCommands = {
 };
 
 export const CommandPalette = () => {
+  const [activeCommands, setActiveCommands] = useState(BlogCommands);
   const commandsRefs = useRef([]);
   const searchBox = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const { keyboardEvent, resetKeyPress } = useContext(KeyboardEventContext);
   const [toggle, isDarkMode] = useToggleDarkMode();
 
+  const [focusCursor, setFocusCursor] = useState(0);
   const setFocused = (ref) => {
     ref.current && ref.current.focus();
   };
 
   const commandPaletteModalRef = useOutsideClick(() => {
-    resetKeyPress()
+    resetKeyPress();
   });
 
   useEffect(() => {
@@ -54,7 +56,23 @@ export const CommandPalette = () => {
     ) {
       setIsOpen(keyboardEvent.includes('OPEN'));
     }
-  }, [keyboardEvent]);
+
+    if (keyboardEvent === CommandEventTypes.NAVIGATE_DOWN_PRESS) {
+      console.log('NAVIGATE_DOWN_PRESS');
+      setFocusCursor((prev) => {
+        return focusCursor < commandsRefs.current.length - 1 ? prev++ : prev;
+      });
+    }
+
+    if (keyboardEvent === CommandEventTypes.NAVIGATE_UP_PRESS) {
+      console.log('NAVIGATE_UP_PRESS');
+      setFocusCursor((prev) => {
+        return focusCursor > 0 ? prev-- : prev;
+      });
+    }
+  }, [focusCursor, keyboardEvent]);
+
+  const commandLabels = Object.keys(activeCommands);
 
   return (
     <div
@@ -63,7 +81,7 @@ export const CommandPalette = () => {
         { 'opacity-0': !isOpen, 'pointer-events-none': !isOpen }
       )}>
       <IF predicate={isOpen}>
-        <div className="flex flex-col" ref={commandPaletteModalRef}>
+        <div className="flex flex-col relative" ref={commandPaletteModalRef}>
           <div className="relative bg-bgPrimary rounded-lg w-full w-[38rem] drop-shadow-md">
             <label className="relative block text-lg font-normal">
               <span className="sr-only">Search</span>
@@ -75,7 +93,21 @@ export const CommandPalette = () => {
                 autoComplete="off"
                 autoFocus
                 onChange={(event) => {
-                  //console.log(event.target.value);
+                  const searchTerm = event.target.value.trim().toLowerCase();
+                  if (searchTerm === '') {
+                    setActiveCommands(BlogCommands);
+                  } else {
+                    setActiveCommands((prev) => {
+                      return Object.keys(prev)
+                        .filter((label) =>
+                          label.toLowerCase().includes(searchTerm)
+                        )
+                        .reduce((acc, key) => {
+                          acc[key] = BlogCommands[key];
+                          return acc;
+                        }, {});
+                    });
+                  }
                 }}
                 className="w-full border border-primary rounded-t-md py-4 pl-16 pr-8 focus:outline-none focus:border-primary text-text bg-bgPrimary"
                 placeholder="Search for anything..."
@@ -84,32 +116,38 @@ export const CommandPalette = () => {
               />
             </label>
           </div>
-          <ul className="flex flex-col bg-bgPrimary drop-shadow-md rounded-b-lg py-2">
-            {Object.keys(BlogCommands).map((key) => {
-              const isColorModeKey = key === 'SWITCH_COLOR_MODE';
-              return (
-                <Command.LinkInList
-                  ref={(el) => {
-                    if (el && !commandsRefs.current.includes(el)) {
-                      commandsRefs.current.push(el);
-                    }
-                  }}
-                  key={key}
-                  cb={() => {
-                    if (BlogCommands[key].closePalette) {
-                      resetKeyPress();
-                    }
-                  }}
-                  className="text-text justify-start flex px-4 my-1 focus:border-primary"
-                  pathTo={isColorModeKey ? toggle : BlogCommands[key].pathTo}>
-                  {isColorModeKey ? (
-                    <ColorSwitchCommandComponent isDarkMode={isDarkMode} />
-                  ) : (
-                    BlogCommands[key].label
-                  )}
-                </Command.LinkInList>
-              );
-            })}
+          <ul className="flex flex-col bg-bgPrimary drop-shadow-md rounded-b-lg py-2 fixed-list">
+            {commandLabels.length > 0 ? (
+              commandLabels.map((key) => {
+                const isColorModeKey = key === 'SWITCH_COLOR_MODE';
+                return (
+                  <Command.LinkInList
+                    ref={(el) => {
+                      if (el && !commandsRefs.current.includes(el)) {
+                        commandsRefs.current.push(el);
+                      }
+                    }}
+                    key={key}
+                    cb={() => {
+                      if (BlogCommands[key].closePalette) {
+                        resetKeyPress();
+                      }
+                    }}
+                    className="text-text justify-start flex px-4 my-1 focus:border-primary"
+                    pathTo={isColorModeKey ? toggle : BlogCommands[key].pathTo}>
+                    {isColorModeKey ? (
+                      <ColorSwitchCommandComponent isDarkMode={isDarkMode} />
+                    ) : (
+                      BlogCommands[key].label
+                    )}
+                  </Command.LinkInList>
+                );
+              })
+            ) : (
+              <div className="text-text justify-start flex px-4 my-1">
+                Oops! I dont have this on the list yet.
+              </div>
+            )}
           </ul>
         </div>
       </IF>

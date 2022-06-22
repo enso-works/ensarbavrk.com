@@ -33,3 +33,9 @@
 #__next {
   @apply h-full flex flex-1 justify-center bg-bgPrimary;
 }
+
+.fixed-list {
+  position: absolute;
+  top: 63px;
+  width: 100%;
+}
