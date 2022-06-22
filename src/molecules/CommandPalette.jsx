@@ -7,6 +7,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { CommandEventTypes, KeyboardEventContext } from '@/lib/keyboardService';
 import { useToggleDarkMode } from '@/lib/useDarkMode';
 import { MoonIcon, SunIcon } from '@/atoms/icons';
+import { useOutsideClick } from '@/lib/utilHooks';
 
 const BlogCommands = {
   ABOUT: {
@@ -38,6 +39,10 @@ export const CommandPalette = () => {
     ref.current && ref.current.focus();
   };
 
+  const commandPaletteModalRef = useOutsideClick(() => {
+    resetKeyPress()
+  });
+
   useEffect(() => {
     if (
       [
@@ -55,10 +60,10 @@ export const CommandPalette = () => {
     <div
       className={classNames(
         'flex flex-1 items-center transition-all ease-in-out duration-300 justify-center bg-slate-400/40 overflow-y-auto overflow-x-hidden fixed top-0 bottom-0 right-0 left-0 z-50 ',
-        { 'opacity-0': !isOpen, 'pointer-events-none': !isOpen },
+        { 'opacity-0': !isOpen, 'pointer-events-none': !isOpen }
       )}>
       <IF predicate={isOpen}>
-        <div className="flex flex-col">
+        <div className="flex flex-col" ref={commandPaletteModalRef}>
           <div className="relative bg-bgPrimary rounded-lg w-full w-[38rem] drop-shadow-md">
             <label className="relative block text-lg font-normal">
               <span className="sr-only">Search</span>
