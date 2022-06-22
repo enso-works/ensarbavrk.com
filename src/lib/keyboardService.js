@@ -15,7 +15,7 @@ export const CommandEventTypes = {
   OPEN_LINK_PRESS: 'OPEN_LINK_PRESS',
 };
 
-const keys = {
+export const keys = {
   Meta: {
     pressed: false,
   },
@@ -38,6 +38,12 @@ const keys = {
     pressed: false,
   },
   Tab: {
+    pressed: false,
+  },
+  Enter: {
+    pressed: false,
+  },
+  Space: {
     pressed: false,
   },
 };

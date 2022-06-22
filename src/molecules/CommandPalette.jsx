@@ -54,6 +54,7 @@ export const CommandPalette = () => {
         CommandEventTypes.COMMAND_PLATE_CLOSE_RELEASE,
       ].includes(keyboardEvent)
     ) {
+      setActiveCommands(BlogCommands);
       setIsOpen(keyboardEvent.includes('OPEN'));
     }
 

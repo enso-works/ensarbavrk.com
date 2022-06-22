@@ -5,6 +5,8 @@ import { useRouter } from 'next/router';
 import classNames from 'classnames/bind';
 import { forwardRef } from 'react';
 import { IF_Else } from '@/atoms/Conditionals';
+import * as path from 'path';
+import { keys } from '@/lib/keyboardService';
 
 const cx = classNames.bind(styles);
 
@@ -43,7 +45,20 @@ const LinkInList = forwardRef(
           <Link pathTo={pathTo} className={className}>
             {children}
           </Link>
-          <div className={className} onClick={() => pathTo()}>
+          <div
+            role="button"
+            tabIndex="0"
+            className={className}
+            onClick={() => pathTo()}
+            onKeyDown={(event) => {
+              if (
+                keys[event.key] === keys.Enter ||
+                keys[event.key] === keys.Space
+              ) {
+                pathTo();
+                event.preventDefault();
+              }
+            }}>
             {children}
           </div>
         </IF_Else>
