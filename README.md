@@ -1,8 +1,8 @@
-# ensarbavrk.com
+# enso.works
 
-My personal digital garden on the web. 🏃🏋️ ⚡ 💻
+My personal blog and other interesting stuff. 
 
-## glossary
+
 
 ## Made with
 
@@ -24,8 +24,7 @@ yarn dev
 
 ## Project Design 
 
-it uses atomic design system to build the site, more about it [here - what is atomic desing](https://atomicdesign.bradfrost.com/).
-
+I've started this project with the atomic design, but most likely it will end up like garbage just to release the blog out there. Enjoy peeking into the code feel free to post pr :P
 some custom components are:
 - [📚] Command pallet command(ctrl)+k with keyboard navigation 
 - [☀️] Light and Dark mode toggle custom NextJS component 

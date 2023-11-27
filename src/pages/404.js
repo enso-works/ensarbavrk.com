@@ -1,7 +1,6 @@
 import Error from 'next/error';
 
 export default function Page({ errorCode }) {
-  console.log(errorCode);
   return (
     <main>
       <p>

@@ -38,16 +38,15 @@ const Link = ({ pathTo, className = 'command', children }) => {
 };
 
 const LinkInList = forwardRef(
-  ({ pathTo, cb = null, className, children }, ref) => {
+  ({ pathTo, cb = null, className, onFocus, children }, ref) => {
     return (
-      <li ref={ref} onClick={cb}>
+      <li onFocus={onFocus} tabIndex="-1" ref={ref} onClick={cb}>
         <IF_Else predicate={typeof pathTo === 'string'}>
           <Link pathTo={pathTo} className={className}>
             {children}
           </Link>
           <div
             role="button"
-            tabIndex="0"
             className={className}
             onClick={() => pathTo()}
             onKeyDown={(event) => {

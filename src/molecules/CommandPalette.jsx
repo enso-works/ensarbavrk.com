@@ -15,17 +15,34 @@ const BlogCommands = {
     description: 'About me',
     pathTo: '/about',
     closePalette: true,
+    idx: 0,
   },
   BLOG: {
     label: 'Blog',
     description: 'Jump to the articles',
     closePalette: true,
     pathTo: '/blog',
+    idx: 1,
   },
   SWITCH_COLOR_MODE: {
     label: 'Switch color mode',
     closePalette: false,
+    idx: 2,
   },
+};
+
+const changeFocus = (idx, cmdRef) => {
+  const command = Object.values(BlogCommands)?.find(
+    (command) => command.idx === idx
+  );
+  if (command) {
+    const ref = cmdRef.current[idx];
+    if (ref) {
+      ref.focus();
+    }
+    let focusedElement = document.activeElement;
+    console.log('FOCUSED ELEMENT', focusedElement);
+  }
 };
 
 export const CommandPalette = () => {
@@ -36,10 +53,7 @@ export const CommandPalette = () => {
   const { keyboardEvent, resetKeyPress } = useContext(KeyboardEventContext);
   const [toggle, isDarkMode] = useToggleDarkMode();
 
-  const [focusCursor, setFocusCursor] = useState(0);
-  const setFocused = (ref) => {
-    ref.current && ref.current.focus();
-  };
+  const focusedCursorRef = useRef(null);
 
   const commandPaletteModalRef = useOutsideClick(() => {
     resetKeyPress();
@@ -58,20 +72,28 @@ export const CommandPalette = () => {
       setIsOpen(keyboardEvent.includes('OPEN'));
     }
 
-    if (keyboardEvent === CommandEventTypes.NAVIGATE_DOWN_PRESS) {
-      console.log('NAVIGATE_DOWN_PRESS');
-      setFocusCursor((prev) => {
-        return focusCursor < commandsRefs.current.length - 1 ? prev++ : prev;
-      });
-    }
+    if (isOpen) {
+      if (keyboardEvent === CommandEventTypes.NAVIGATE_UP_PRESS) {
+        focusedCursorRef.current =
+          focusedCursorRef.current - 1 < 0
+            ? commandsRefs.current.length - 1
+            : focusedCursorRef.current - 1;
+        changeFocus(focusedCursorRef.current, commandsRefs);
+      }
 
-    if (keyboardEvent === CommandEventTypes.NAVIGATE_UP_PRESS) {
-      console.log('NAVIGATE_UP_PRESS');
-      setFocusCursor((prev) => {
-        return focusCursor > 0 ? prev-- : prev;
-      });
+      if (keyboardEvent === CommandEventTypes.NAVIGATE_DOWN_PRESS) {
+        focusedCursorRef.current =
+          focusedCursorRef.current + 1 > commandsRefs.current.length - 1
+            ? 0
+            : focusedCursorRef.current + 1;
+        changeFocus(focusedCursorRef.current, commandsRefs);
+      }
+      console.log('EVENT ', keyboardEvent);
+      if (keyboardEvent === CommandEventTypes.OPEN_LINK_PRESS) {
+        console.log('do the magic');
+      }
     }
-  }, [focusCursor, keyboardEvent]);
+  }, [keyboardEvent]);
 
   const commandLabels = Object.keys(activeCommands);
 
@@ -92,7 +114,6 @@ export const CommandPalette = () => {
               <input
                 ref={searchBox}
                 autoComplete="off"
-                autoFocus
                 onChange={(event) => {
                   const searchTerm = event.target.value.trim().toLowerCase();
                   if (searchTerm === '') {
@@ -134,7 +155,7 @@ export const CommandPalette = () => {
                         resetKeyPress();
                       }
                     }}
-                    className="text-text justify-start flex px-4 my-1 focus:border-primary"
+                    className="justify-start flex px-4 py-2 focus:border-primary focus:border-solid focus:border-0"
                     pathTo={isColorModeKey ? toggle : BlogCommands[key].pathTo}>
                     {isColorModeKey ? (
                       <ColorSwitchCommandComponent isDarkMode={isDarkMode} />
@@ -159,10 +180,10 @@ export const CommandPalette = () => {
 const ColorSwitchCommandComponent = ({ isDarkMode }) => {
   return (
     <IF_Else predicate={isDarkMode}>
-      <div className="flex justify-center items-center">
+      <div tabIndex={1} className="flex justify-center items-center">
         <MoonIcon /> <p className="ml-2">Switch to light mode</p>
       </div>
-      <div className="flex justify-center items-center">
+      <div tabIndex={1} className="flex justify-center items-center">
         <SunIcon /> <p className="ml-2">Switch to dark mode</p>
       </div>
     </IF_Else>

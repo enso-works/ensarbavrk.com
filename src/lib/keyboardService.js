@@ -49,24 +49,8 @@ export const keys = {
 };
 
 export const KeyboardNavigationService = (callback) => {
-  let throttlePause;
-
-  const throttle = (callback, time) => {
-    if (throttlePause) return;
-
-    throttlePause = true;
-
-    setTimeout(() => {
-      callback();
-
-      throttlePause = false;
-    }, time);
-  };
-
   const callCommandWithType = (command, callback, resetting = false) => {
-    throttle(() => {
-      callback(command);
-    }, 300);
+    callback(command);
     if (resetting) {
       resetKeyPress();
     }
@@ -128,6 +112,13 @@ export const KeyboardNavigationService = (callback) => {
           callCommandWithType(CommandEventTypes.NAVIGATE_UP_RELEASE, callback),
       },
     },
+    {
+      predicate: keys[event.key] === keys.Enter,
+      commands: {
+        down: () =>
+          callCommandWithType(CommandEventTypes.OPEN_LINK_PRESS, callback),
+      },
+    },
   ];
   const eventHandler = (event, isUp = false) => {
     if (keys[event.key]) {
@@ -147,7 +138,7 @@ export const KeyboardNavigationService = (callback) => {
   };
 
   const keyDownListener = (event) => {
-    eventHandler(event);
+    eventHandler(event, false);
   };
 
   const attachListener = (elem = window.document.documentElement) => {
