@@ -6,7 +6,7 @@ import { BlogSummaryCard } from '@/organisms/BlogSummaryCard';
 
 export default function Index({ posts }) {
   return (
-    <div>
+    <div className="mt-9">
       <BlogPageHeading />
       <ul>
         {posts.map((post) => {
