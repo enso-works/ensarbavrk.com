@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "make-it-pretty": "prettier --write 'src/**/*.{js,jsx,css,scss,json,md}'",
+    "make-it-pretty": "prettier --write 'src/**/*.{js,jsx,css,scss,json,md}'"
   },
   "dependencies": {
     "@mdx-js/loader": "^2.1.0",
@@ -31,5 +31,4 @@
     "sass": "^1.49.9",
     "tailwindcss": "^3.0.22"
   }
-
 }
