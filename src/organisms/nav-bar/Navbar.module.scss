@@ -1,5 +1,5 @@
 .navbar {
-  @apply flex justify-between items-center;
+  @apply flex items-center relative;
 
   ul {
     @apply flex;
@@ -13,4 +13,12 @@
       }
     }
   }
+}
+
+.signature {
+  @apply flex flex-1 justify-center align-middle;
+}
+
+.button {
+  @apply absolute right-0;
 }

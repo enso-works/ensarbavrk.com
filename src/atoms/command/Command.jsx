@@ -10,6 +10,22 @@ import { keys } from '@/lib/keyboardService';
 
 const cx = classNames.bind(styles);
 
+const Button = ({ onClick, className, active, children }) => {
+  return (
+    <button
+      onClick={onClick}
+      className={cx(
+        'command',
+        {
+          active: active,
+        },
+        className
+      )}>
+      {children}
+    </button>
+  );
+};
+
 const ButtonInList = ({ onClick, active, children }) => {
   return (
     <li
@@ -71,5 +87,6 @@ LinkInList.displayName = 'LinkInList';
 export const Command = {
   Link,
   LinkInList,
+  Button,
   ButtonInList,
 };

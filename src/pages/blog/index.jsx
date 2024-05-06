@@ -7,7 +7,7 @@ export default function Index({ posts }) {
   return (
     <div className="mt-9">
       <BlogPageHeading />
-      <ul>
+      <ul className={"mb-9"}>
         {posts.map((post) => {
           return <BlogSummaryCard key={post.meta.title} meta={post.meta} />;
         })}

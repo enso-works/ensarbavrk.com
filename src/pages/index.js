@@ -1,6 +1,9 @@
 import Head from 'next/head';
+import { BlogPageHeading } from '@/molecules/BlogPageHeading';
+import { BlogSummaryCard } from '@/organisms/BlogSummaryCard';
+import {getAllPosts} from "@/lib/postsApi";
 
-export default function Home() {
+export default function Home({ posts }) {
   return (
     <div>
       <Head>
@@ -9,9 +12,23 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1>This will be my digital garden.</h1>
-      </main>
+      <div className="mt-9">
+        <BlogPageHeading />
+        <ul className={'mb-9'}>
+          {posts.map((post) => {
+            return <BlogSummaryCard key={post.meta.title} meta={post.meta} />;
+          })}
+        </ul>
+      </div>
     </div>
   );
+}
+
+export async function getStaticProps() {
+    const posts = getAllPosts();
+    return {
+        props: {
+            posts,
+        },
+    };
 }
