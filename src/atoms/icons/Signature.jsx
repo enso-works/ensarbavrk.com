@@ -5,8 +5,8 @@ const SignatureIcon = (props) => {
   return (
       <svg
           xmlns="http://www.w3.org/2000/svg"
-          width={242}
-          height={154}
+          width={182}
+          height={112}
           viewBox="0 0 885 587"
           fill="none"
           {...props}

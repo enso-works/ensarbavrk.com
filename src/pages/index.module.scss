@@ -1,0 +1,21 @@
+.heroImage {
+  @apply overflow-hidden
+}
+
+.static {
+  position: absolute;
+  background: white;
+  width: 240px;
+  height: 240px;
+  border-radius: 16px;
+}
+
+.gif {
+  width: 276px;
+  height: 240px;
+  border-radius: 16px;
+}
+
+.static:hover {
+  opacity:0;
+}
