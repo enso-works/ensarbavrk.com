@@ -1,15 +1,12 @@
 # enso.works
 
-My personal blog and other interesting stuff. 
-
-
+My site [enso.works](https://enso.works "personal blog")
 
 ## Made with
 
 - NextJS
 - Tailwind
-- Sass
-- 🤔 what else?
+- and garbage code 😛
 
 ## Run it
 
@@ -24,7 +21,5 @@ yarn dev
 
 ## Project Design 
 
-I've started this project with the atomic design, but most likely it will end up like garbage just to release the blog out there. Enjoy peeking into the code feel free to post pr :P
-some custom components are:
-- [📚] Command pallet command(ctrl)+k with keyboard navigation 
+- [📚] Command pallet command(ctrl)+k with keyboard navigation | Not in use anymore since there is no navigation on the site
 - [☀️] Light and Dark mode toggle custom NextJS component 
