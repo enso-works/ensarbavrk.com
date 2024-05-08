@@ -28,12 +28,18 @@ export default function Home({ posts }) {
         </div>
         <div className="flex flex-col ml-9">
           <H2 className="mb-6">
-            Hi, I'm <span className={'text-primary'}>Enso.</span>
+            Hi, I&apos;m <span className={'text-primary'}>Enso.</span>
           </H2>
-          <P className="mb-3">
+          <P className="mb-3 text-textSecondary">
             I build things and enjoy programming, designing, console logging,
             and all things outside!{' '}
-            <span className="block mt-4">Currently making the @UVA app!</span>
+            <span className="block mt-4">
+              Currently making the{' '}
+              <a  href="https://uva.me/" className="text-primary mr-1">
+                @uva.me
+              </a>
+              app!
+            </span>
           </P>
         </div>
       </div>

@@ -3,6 +3,7 @@
 }
 
 .static {
+  object-fit: cover;
   position: absolute;
   background: white;
   width: 240px;
@@ -11,6 +12,7 @@
 }
 
 .gif {
+  object-fit: cover;
   width: 276px;
   height: 240px;
   border-radius: 16px;
