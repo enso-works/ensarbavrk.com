@@ -1,20 +1,7 @@
 .heroImage {
   @apply overflow-hidden
 }
-
-.static {
-  object-fit: cover;
-  position: absolute;
-  background: white;
-  width: 240px;
-  height: 240px;
-  border-radius: 16px;
-}
-
-.gif {
-  object-fit: cover;
-  width: 276px;
-  height: 240px;
+.imageBorder {
   border-radius: 16px;
 }
 

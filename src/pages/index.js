@@ -3,7 +3,8 @@ import { BlogPageHeading } from '@/molecules/BlogPageHeading';
 import { BlogSummaryCard } from '@/organisms/BlogSummaryCard';
 import { getAllPosts } from '@/lib/postsApi';
 import styles from './index.module.scss';
-import { H2, P, Small } from '@/atoms/Typography';
+import { H2, P } from '@/atoms/Typography';
+import { AboutImage } from '@/molecules/AboutImage';
 export default function Home({ posts }) {
   return (
     <div>
@@ -15,16 +16,7 @@ export default function Home({ posts }) {
 
       <div className="flex flex-row my-20">
         <div className={styles.heroImage}>
-          <img
-            className={styles.static}
-            src="/images/assets/static.png"
-            alt={'hero image of enso'}
-          />
-          <img
-            className={styles.gif}
-            src="/images/assets/enso.gif"
-            alt={'hero image of enso gif'}
-          />
+          <AboutImage className={styles.imageBorder} />
         </div>
         <div className="flex flex-col ml-9">
           <H2 className="mb-6">
@@ -35,7 +27,7 @@ export default function Home({ posts }) {
             and all things outside!{' '}
             <span className="block mt-4">
               Currently making the{' '}
-              <a  href="https://uva.me/" className="text-primary mr-1">
+              <a href="https://uva.me/" className="text-primary mr-1">
                 @uva.me
               </a>
               app!
