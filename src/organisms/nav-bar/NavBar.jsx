@@ -6,7 +6,7 @@ import { useToggleDarkMode } from '@/lib/useDarkMode';
 import styles from './Navbar.module.scss';
 
 export const NavBar = () => {
-  const [toggle, isDarkMode] = useToggleDarkMode();
+  const { toggle, isDarkMode } = useToggleDarkMode();
 
   return (
     <nav className={styles.navbar}>

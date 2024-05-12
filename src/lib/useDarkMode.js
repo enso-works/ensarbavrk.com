@@ -61,12 +61,12 @@ export const useToggleDarkMode = () => {
     }
   }, [shouldToggle]);
 
-  return [
-    () => {
+  return {
+    toggle: () => {
       setToggle((prev) => !prev);
     },
     isDarkMode,
-  ];
+  };
 };
 
 export const useDarkMode = () => {
@@ -84,7 +84,6 @@ export const useDarkMode = () => {
       }
     };
     window.addEventListener('storage', storageEvent);
-
     setupTransitionClass();
     return () => window.removeEventListener('storage', storageEvent);
   }, []);

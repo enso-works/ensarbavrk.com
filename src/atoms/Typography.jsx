@@ -24,8 +24,8 @@ export const H2 = ({ children }) => (
   <Heading sizeClass="text-3xl">{children}</Heading>
 );
 
-export const Small = ({ children }) => (
-  <Text classes="text-sm">{children}</Text>
+export const Small = ({ children, className }) => (
+  <Text classes={classNames("text-sm",className)}>{children}</Text>
 );
 
 export const P = ({ children, className }) => (
