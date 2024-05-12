@@ -1,22 +1,12 @@
 import * as React from 'react';
 import Image from 'next/image';
 import { H2, P, Small } from '@/atoms/Typography';
-import { useToggleDarkMode } from '@/lib/useDarkMode';
-import classNames from 'classnames';
 
 export const BlogSummaryCard = ({ meta }) => {
-  const { isDarkMode } = useToggleDarkMode();
-
-  console.log('HERE ', isDarkMode);
   return (
     <li
       key={meta.title}
-      className={classNames(
-        'card card-side bg-base-100 mb-8 sm:flex-row flex-col',
-        {
-          'shadow-xl': isDarkMode,
-        }
-      )}>
+      className={'card card-side bg-base-100 mb-8 sm:flex-row flex-col my-12'}>
       <Image
         style={{
           objectFit: 'cover', // cover, contain, none
@@ -30,7 +20,7 @@ export const BlogSummaryCard = ({ meta }) => {
         width={240}
         height={240}
       />
-      <div className="card-body py-0 px-0 sm:px-8">
+      <div className="card-body py-0 px-0 sm:px-8 sm:mt-0 mt-6">
         <H2 className="card-title">{meta.title}</H2>
         <P className="my-4">{meta.summary}</P>
         <div className="flex mb-1">

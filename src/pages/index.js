@@ -6,6 +6,7 @@ import styles from './index.module.scss';
 import {H1, H2, P} from '@/atoms/Typography';
 import { AboutImage } from '@/molecules/AboutImage';
 export default function Home({ posts }) {
+  console.log('posts ',posts)
   return (
     <div>
       <Head>
