@@ -28,4 +28,6 @@ export const Small = ({ children }) => (
   <Text classes="text-sm">{children}</Text>
 );
 
-export const P = ({ children }) => <Text classes="text-text">{children}</Text>;
+export const P = ({ children, className }) => (
+  <Text classes={classNames('text-text', className)}>{children}</Text>
+);

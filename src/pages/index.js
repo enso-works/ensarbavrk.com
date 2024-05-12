@@ -3,7 +3,7 @@ import { BlogPageHeading } from '@/molecules/BlogPageHeading';
 import { BlogSummaryCard } from '@/organisms/BlogSummaryCard';
 import { getAllPosts } from '@/lib/postsApi';
 import styles from './index.module.scss';
-import { H2, P } from '@/atoms/Typography';
+import {H1, H2, P} from '@/atoms/Typography';
 import { AboutImage } from '@/molecules/AboutImage';
 export default function Home({ posts }) {
   return (
@@ -14,25 +14,27 @@ export default function Home({ posts }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex flex-row my-20">
-        <div className={styles.heroImage}>
-          <AboutImage className={styles.imageBorder} />
-        </div>
-        <div className="flex flex-col ml-9">
-          <H2 className="mb-6">
-            Hi, I&apos;m <span className={'text-primary'}>Enso.</span>
-          </H2>
-          <P className="mb-3 text-textSecondary">
-            I build things and enjoy programming, designing, console logging,
-            and all things outside!{' '}
-            <span className="block mt-4">
+      <div className="hero bg-base-200">
+        <div className="hero-content flex-col lg:flex-row lg:gap-8 sm:gap-0">
+          <div className="w-fit mask sm:mask-squircle mask-circle">
+            <AboutImage  />
+          </div>
+          <div>
+            <H1  className="text-5xl font-bold mb-4 lg:text-left text-center">
+              Hi, I&apos;m <span className={'text-primary'}>Enso.</span>
+            </H1>
+            <P className="text-textSecondary lg:text-left text-center">
+              I build things and enjoy programming, designing, console logging,
+              and all things outside!{' '}
+              <span className="block">
               Currently making the{' '}
-              <a href="https://uva.me/" className="text-primary mr-1">
+                <a href="https://uva.me/" className="text-primary mr-1">
                 @uva.me
               </a>
               app!
             </span>
-          </P>
+            </P>
+          </div>
         </div>
       </div>
 
