@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { IF_Else } from '@/atoms/Conditionals';
 import { Command } from '@/atoms/command/Command';
-import { MoonIcon, Signature, SunIcon } from '@/atoms/icons';
-import { useToggleDarkMode } from '@/lib/useDarkMode';
+import { Signature } from '@/atoms/icons';
 import styles from './Navbar.module.scss';
+import { ChangeLightMode } from '@/molecules/ChangeLightMode';
 
 export const NavBar = () => {
-  const { toggle, isDarkMode } = useToggleDarkMode();
-
   return (
     <nav className={styles.navbar}>
       <div className={styles.signature}>
@@ -15,12 +12,7 @@ export const NavBar = () => {
           <Signature />
         </Command.Link>
       </div>
-      <Command.Button className={styles.button} onClick={() => toggle()}>
-        <IF_Else predicate={isDarkMode}>
-          <MoonIcon />
-          <SunIcon />
-        </IF_Else>
-      </Command.Button>
+      <ChangeLightMode />
     </nav>
   );
 };
