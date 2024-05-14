@@ -4,19 +4,20 @@ import matter from 'gray-matter';
 import { sync } from 'glob';
 import * as path from 'path';
 
-const postsDirectory = join(process.cwd(), './src/pages/_posts');
-
-const getSlugs = () =>
+const postsDirectory = join(process.cwd(), './src/content');
+console.log('HEREEE ',postsDirectory)
+export const getSlugs = () =>
   sync(`${postsDirectory}/*.mdx`).map(
     (path) => path.split('/').slice(-1).join('').split('.')[0]
   );
 
-const postFromSlug = (slug) => {
+export const postFromSlug = (slug) => {
   const postPath = path.join(postsDirectory, `${slug}.mdx`);
-  const { data, content } = matter(fs.readFileSync(postPath));
+  const { data, content } = matter(fs.readFileSync(postPath, 'utf8'));
   return {
     content,
     meta: data,
+    slug,
   };
 };
 

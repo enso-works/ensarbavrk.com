@@ -25,9 +25,9 @@ export const H2 = ({ children }) => (
 );
 
 export const Small = ({ children, className }) => (
-  <Text classes={classNames("text-sm",className)}>{children}</Text>
+  <Text classes={classNames("text-sm text-textSecondary",className)}>{children}</Text>
 );
 
 export const P = ({ children, className }) => (
-  <Text classes={classNames('text-text', className)}>{children}</Text>
+  <Text classes={classNames('text-text text-textSecondary', className)}>{children}</Text>
 );

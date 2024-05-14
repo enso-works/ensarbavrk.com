@@ -3,10 +3,10 @@ import { BlogPageHeading } from '@/molecules/BlogPageHeading';
 import { BlogSummaryCard } from '@/organisms/BlogSummaryCard';
 import { getAllPosts } from '@/lib/postsApi';
 import styles from './index.module.scss';
-import {H1, H2, P} from '@/atoms/Typography';
+import { H1, H2, P } from '@/atoms/Typography';
 import { AboutImage } from '@/molecules/AboutImage';
 export default function Home({ posts }) {
-  console.log('posts ',posts)
+  console.log('posts ', posts);
   return (
     <div>
       <Head>
@@ -18,22 +18,22 @@ export default function Home({ posts }) {
       <div className="hero bg-base-200">
         <div className="hero-content flex-col lg:flex-row lg:gap-8 sm:gap-0">
           <div className="w-fit mask sm:mask-squircle mask-circle">
-            <AboutImage  />
+            <AboutImage />
           </div>
           <div>
-            <H1  className="text-5xl font-bold mb-4 lg:text-left text-center">
+            <H1 className="text-5xl font-bold mb-4 lg:text-left text-center">
               Hi, I&apos;m <span className={'text-primary'}>Enso.</span>
             </H1>
             <P className="text-textSecondary lg:text-left text-center">
               I build things and enjoy programming, designing, console logging,
               and all things outside!{' '}
               <span className="block">
-              Currently making the{' '}
+                Currently making the{' '}
                 <a href="https://uva.me/" className="text-primary mr-1">
-                @uva.me
-              </a>
-              app!
-            </span>
+                  @uva.me
+                </a>
+                app!
+              </span>
             </P>
           </div>
         </div>
@@ -43,7 +43,13 @@ export default function Home({ posts }) {
         <BlogPageHeading />
         <ul className={'mb-9'}>
           {posts.map((post) => {
-            return <BlogSummaryCard key={post.meta.title} meta={post.meta} />;
+            return (
+              <BlogSummaryCard
+                key={post.meta.title}
+                meta={post.meta}
+                slug={post.slug}
+              />
+            );
           })}
         </ul>
       </div>
