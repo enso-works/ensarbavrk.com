@@ -54,7 +54,7 @@ export default function Home({ posts }) {
             })}
           </ul>
         </div>
-      <GoogleAnalytics gaId="G-2J3H1MQ6KL" />
+      <GoogleAnalytics gaId="G-85C2W1D4ES" />
     </div>
   );
 }
