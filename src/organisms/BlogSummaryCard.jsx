@@ -2,14 +2,20 @@ import * as React from 'react';
 import Image from 'next/image';
 import { H2, P, Small } from '@/atoms/Typography';
 import Link from 'next/link';
+import { EventMap, trackGAEvent } from '@/lib/ga4';
 
 export const BlogSummaryCard = ({ meta, slug }) => {
   return (
-      <Link href={`/posts/${slug}`}>
-    <li
-      onClick={() => {}}
-      key={meta.title}
-      className={'card card-side bg-base-100 mb-8 sm:flex-row flex-col my-12'}>
+    <Link
+      href={`/posts/${slug}`}
+      onClick={() => {
+        trackGAEvent(...EventMap.BLOG);
+      }}>
+      <li
+        key={meta.title}
+        className={
+          'card card-side bg-base-100 mb-8 sm:flex-row flex-col my-12'
+        }>
         <Image
           style={{
             objectFit: 'cover', // cover, contain, none
@@ -34,7 +40,7 @@ export const BlogSummaryCard = ({ meta, slug }) => {
             <Small>Jan 31, 2022</Small>
           </div>
         </div>
-    </li>
-      </Link>
+      </li>
+    </Link>
   );
 };

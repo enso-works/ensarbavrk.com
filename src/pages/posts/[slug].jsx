@@ -42,7 +42,6 @@ export async function getStaticPaths() {
 }
 export async function getStaticProps({ params }) {
   const {content, meta} = postFromSlug(params.slug);
-    console.log('CONTEEENTTT ', meta)
   const mdxSource = await serialize(content, {
       mdxOptions: {
           development: true,

@@ -5,7 +5,6 @@ import { sync } from 'glob';
 import * as path from 'path';
 
 const postsDirectory = join(process.cwd(), './src/content');
-console.log('HEREEE ',postsDirectory)
 export const getSlugs = () =>
   sync(`${postsDirectory}/*.mdx`).map(
     (path) => path.split('/').slice(-1).join('').split('.')[0]
