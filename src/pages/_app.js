@@ -5,10 +5,10 @@ import { DarkModeInitializerScript, useDarkMode } from '@/lib/useDarkMode';
 const App = ({ Component, pageProps }) => {
   useDarkMode();
   return (
-      <PageTemplate>
+    <PageTemplate>
         <DarkModeInitializerScript />
         <Component {...pageProps} />
-      </PageTemplate>
+    </PageTemplate>
   );
 };
 

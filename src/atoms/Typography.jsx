@@ -20,14 +20,20 @@ export const H1 = ({ children, ...props }) => (
   </Heading>
 );
 
-export const H2 = ({ children }) => (
-  <Heading sizeClass="text-3xl">{children}</Heading>
+export const H2 = ({ children, ...props }) => (
+  <Heading sizeClass="text-3xl" {...props}>
+    {children}
+  </Heading>
 );
 
 export const Small = ({ children, className }) => (
-  <Text classes={classNames("text-sm text-textSecondary",className)}>{children}</Text>
+  <Text classes={classNames('text-sm text-textSecondary', className)}>
+    {children}
+  </Text>
 );
 
 export const P = ({ children, className }) => (
-  <Text classes={classNames('text-text text-textSecondary', className)}>{children}</Text>
+  <Text classes={classNames('text-text text-textSecondary', className)}>
+    {children}
+  </Text>
 );

@@ -11,9 +11,45 @@ tags:
 - Functional JavaScript
 ---
 
+Demystifying functional programming for JavaScript developers every day. With practical tips that you can start using today even if your team is not practicing functional programming.
 
-# JavaScript Functional programming demystified - Functions
+<H2>
+Introduction
+</H2>
 
----
+If we start with the question, what is a paradigm? To me, a paradigm is a way of doing things; it defines how we think about problems and how we approach them.
 
-this will be somtimes the blog article :D
+Naturally, for us, it is procedural since it feels most familiar, as it is concrete and imperative. We reason about programs like a recipe for a cake; we write concrete and super-specific steps to bake a cake.
+While functional is a bit different and needs us to change this habit of thinking in imperative steps, but rather we need to reason about steps in a declarative way. So functional programming is about... you would be surprised by making software with functions 😂. Fundamentally, writing software by composing pure functions and describing functions in a declarative way.
+
+The phrase "declarative programming" means that the program logic is expressed without explicitly describing the flow control.
+
+In the first part of this series, I will focus on functions the most.
+<H2>
+Functions
+</H2>
+
+A function is an extracted procedure into a block of code. We give that block a name so we can call it in different places and as many times as we want, with or without parameters.
+
+We need to understand two things before proceeding. First, JavaScript treats functions as first-class citizens. Functions are values like any other value. You can assign them, pass them to another function, or return them from a function. That is one of the most essential points for the ability to utilize FP principles.
+
+The second principle is the concept of purity. Don't get me wrong, of course, it is hard to think about purity in an unpure world, but for us to benefit from FP concepts we are interested in pure enough
+
+Let's quickly review what a "pure" function is.
+First, a function must be idempotent, meaning calling it once or many times will always produce the same output.
+
+It must not interact with the outer world —the global state— nor should it be affected by the outer world, i.e., it should not produce side effects. It must not change the arguments passed in.
+<H2>
+Side effects
+</H2>
+
+A side effect is an event caused by a system within a limited scope in which an effect falls over that scope. So, technically, even if we use console.log inside our functions, the function will be unpure. It's unpure because console.log will fall over the scope of the function it is called on, but we should not be bothered about console.log.
+
+Let's take a look at some impure examples.
+
+
+
+```js
+const number = 2
+const impure = () => 4 + number
+```
