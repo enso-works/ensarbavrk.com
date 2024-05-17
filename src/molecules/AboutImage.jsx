@@ -6,9 +6,7 @@ export const AboutImage = ({ className }) => {
   const onMouseEnter = () => setIsHovered(true);
   const onMouseLeave = () => setIsHovered(false);
   return (
-    <div
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}>
+    <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {isHovering ? (
         <Img className={className} path={'/images/assets/enso.gif'} />
       ) : (
@@ -18,8 +16,11 @@ export const AboutImage = ({ className }) => {
   );
 };
 
-const Img = ({path, className}) => (
+const Img = ({ path, className }) => (
   <Image
+    quality="85"
+    loading="lazy"
+    proprity={true}
     style={{
       objectFit: 'contain', // cover, contain, none
     }}

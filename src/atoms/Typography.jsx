@@ -33,7 +33,7 @@ export const Small = ({ children, className }) => (
 );
 
 export const P = ({ children, className }) => (
-  <Text classes={classNames('text-text text-textSecondary', className)}>
+  <Text classes={classNames('text-text text-lg text-textSecondary ', className)}>
     {children}
   </Text>
 );

@@ -18,7 +18,7 @@ const MDX_H2 = ({ children, ...rest }) => (
 );
 
 const MDX_P = ({ children, ...rest }) => (
-  <P {...rest} className="max-w-readable">
+  <P {...rest} className="max-w-readable leading-8 ">
     {children}
   </P>
 );
@@ -37,18 +37,21 @@ const components = {
     );
   },
   pre: ({ children }) => {
-    return <div className="mockup-code my-6">{children}</div>;
+    return <div className="mockup-code my-12">{children}</div>;
   },
 };
 
 export default function Post({ source, meta }) {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col min-w-full">
       <Image
         style={{
           objectFit: 'contain',
         }}
         src={meta.image}
+        quality="85"
+        loading="lazy"
+        proprity={true}
         className={'rounded-2xl my-20'}
         width={899}
         height={420}
