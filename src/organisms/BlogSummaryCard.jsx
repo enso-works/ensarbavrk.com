@@ -23,7 +23,7 @@ export const BlogSummaryCard = ({ meta, slug }) => {
             {meta.summary}
           </P>
           <div className="mb-1 flex">
-            <Small className="flex-grow-0 mr-4">6 min read</Small>
+            <Small className="flex-grow-0 mr-4">{meta?.readingTime}</Small>
             <Small className="flex-grow-0 ">12123123 views</Small>
           </div>
         </div>

@@ -5,7 +5,6 @@ import { H1, H2, P, Small } from '@/atoms/Typography';
 import Image from 'next/image';
 import * as React from 'react';
 import { SyntaxHighLight } from '@/atoms/SyntaxHighLight';
-
 const MDX_H1 = ({ children, ...rest }) => (
   <H1 {...rest} className="bg-red-500">
     {children}
@@ -78,7 +77,7 @@ export async function getStaticPaths() {
   };
 }
 export async function getStaticProps({ params }) {
-  const { content, meta } = postFromSlug(params.slug);
+  const { content, meta } =  postFromSlug(params.slug);
   const mdxSource = await serialize(content, {
     parseFrontmatter: true,
     mdxOptions: {
