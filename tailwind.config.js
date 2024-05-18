@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       maxWidth: {
         readable: '65ch',
+        '80vw': '80vw'
       },
       colors: {
         primary: 'var(--color-text-accent)',

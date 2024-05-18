@@ -9,7 +9,7 @@ export const SyntaxHighLight = ({ children, className }) => {
   return (
     <Highlight code={children} language={language}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <pre>
+        <pre className={"max-w-80vw"}>
           {tokens.map((line, i) => (
             <div key={i} {...getLineProps({ line })}>
               <span className={'mx-6'}>{i + 1}</span>
