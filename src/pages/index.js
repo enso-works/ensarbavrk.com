@@ -6,6 +6,7 @@ import { getAllPosts } from '@/lib/postsApi';
 import { H1, P } from '@/atoms/Typography';
 import { AboutImage } from '@/molecules/AboutImage';
 import { useGoogleAnalytics } from '@/lib/useGoogleAnalytics';
+import { getViewCountForAllPosts } from '@/lib/viewCount';
 export default function Home({ posts }) {
   useGoogleAnalytics();
   return (
@@ -48,6 +49,7 @@ export default function Home({ posts }) {
                 key={post.meta.title}
                 meta={post.meta}
                 slug={post.slug}
+                views={post.views}
               />
             );
           })}
@@ -59,9 +61,16 @@ export default function Home({ posts }) {
 
 export async function getStaticProps() {
   const posts = getAllPosts();
+
+  const data = await getViewCountForAllPosts();
+  const mappedPosts = posts.map((post) => {
+    const views = data.find((v) =>  v.slug.includes(post.slug));
+    return { ...post, views };
+  });
+
   return {
     props: {
-      posts,
+      posts: mappedPosts,
     },
   };
 }

@@ -4,7 +4,7 @@ import { H2, P, Small } from '@/atoms/Typography';
 import Link from 'next/link';
 import { EventMap, trackGAEvent } from '@/lib/ga4';
 
-export const BlogSummaryCard = ({ meta, slug }) => {
+export const BlogSummaryCard = ({ meta, slug, views }) => {
   return (
     <Link
       href={`/posts/${slug}`}
@@ -24,7 +24,7 @@ export const BlogSummaryCard = ({ meta, slug }) => {
           </P>
           <div className="mb-1 flex">
             <Small className="flex-grow-0 mr-4">{meta?.readingTime}</Small>
-            <Small className="flex-grow-0 ">12123123 views</Small>
+            <Small className="flex-grow-0 ">{views.views} views</Small>
           </div>
         </div>
         <Image
