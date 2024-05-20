@@ -2,15 +2,12 @@ import * as React from 'react';
 import Image from 'next/image';
 import { H2, P, Small } from '@/atoms/Typography';
 import Link from 'next/link';
-import { EventMap, trackGAEvent } from '@/lib/ga4';
 
-export const BlogSummaryCard = ({ meta, slug, views }) => {
+export const BlogSummaryCard = ({ meta, slug, views: { views } }) => {
+  console.log('VIES', views);
   return (
     <Link
-      href={`/posts/${slug}`}
-      onClick={() => {
-        trackGAEvent(...EventMap.BLOG);
-      }}>
+      href={`/posts/${slug}`}>
       <li
         key={meta.title}
         className={
@@ -24,7 +21,7 @@ export const BlogSummaryCard = ({ meta, slug, views }) => {
           </P>
           <div className="mb-1 flex">
             <Small className="flex-grow-0 mr-4">{meta?.readingTime}</Small>
-            <Small className="flex-grow-0 ">{views.views} views</Small>
+            <View views={views} />
           </div>
         </div>
         <Image
@@ -41,5 +38,13 @@ export const BlogSummaryCard = ({ meta, slug, views }) => {
         />
       </li>
     </Link>
+  );
+};
+
+const View = ({ className = 'flex-grow-0 ', views }) => {
+  return (
+    <Small className={className}>
+      {views < 2 ? `${views} view` : `${views} views`}
+    </Small>
   );
 };

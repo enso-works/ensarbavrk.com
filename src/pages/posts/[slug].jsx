@@ -5,7 +5,8 @@ import { H1, H2, P, Small } from '@/atoms/Typography';
 import Image from 'next/image';
 import * as React from 'react';
 import { SyntaxHighLight } from '@/atoms/SyntaxHighLight';
-import {getViewCount} from "@/lib/viewCount";
+import { getViewCount } from '@/lib/viewCount';
+import { BlockQuote } from '@/atoms/BlockQuote';
 const MDX_H1 = ({ children, ...rest }) => (
   <H1 {...rest} className="bg-red-500">
     {children}
@@ -29,6 +30,7 @@ const components = {
   P: MDX_P,
   p: MDX_P,
   Small,
+  BlockQuote,
   code: ({ children, className }) => {
     return className ? (
       <SyntaxHighLight className={className}>{children}</SyntaxHighLight>
@@ -78,9 +80,9 @@ export async function getStaticPaths() {
   };
 }
 export async function getStaticProps({ params }) {
-  const { content, meta } =  postFromSlug(params.slug);
-  const data =  await getViewCount();
-  console.log('DATAAA ', data)
+  const { content, meta } = postFromSlug(params.slug);
+  const data = await getViewCount();
+  console.log('DATAAA ', data);
   const mdxSource = await serialize(content, {
     parseFrontmatter: true,
     mdxOptions: {

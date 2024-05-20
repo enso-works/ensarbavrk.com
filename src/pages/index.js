@@ -64,7 +64,7 @@ export async function getStaticProps() {
 
   const data = await getViewCountForAllPosts();
   const mappedPosts = posts.map((post) => {
-    const views = data.find((v) =>  v.slug.includes(post.slug));
+    const views = data?.find((v) =>  v.slug.includes(post.slug));
     return { ...post, views };
   });
 

@@ -53,3 +53,96 @@ Let's take a look at some impure examples.
 const number = 2
 const impure = () => 4 + number
 ```
+
+second one
+
+```js
+const impure = fruit => fruit.strain = true
+```
+
+And the next one below would be pure enough, Like I already mentioned it's not possible to be completely pure in the unpure world, and we should not be bothered with it in everyday life
+
+```js
+const pureRandomNumber = () => 21
+```
+
+to explain this statement, "unpure world," let's take an example: make a function that passes all of our requirements to be pure, idempotent, and will not interact with or change anything outside. Heck, it doesn't even have arguments.
+
+```js
+const number = pureRandomNumber()
+```
+
+require them, and we can affect the outer world and crash the application. However, we don't need to stress about these edge cases and consider these pure functions.
+
+```js
+const isNumber = pureRandomNumber((() => { throw 'Bumm'})())
+```
+
+When we rely on pure functions, we can achieve cool things. One of them is memoization. Since we are only dependent on inputs to generate outputs if we call the function twice with the same parameters, we can memorize the output, and on the second call, we can return the same result without extra computing.
+
+<H2>
+    Loops
+</H2>
+
+Loops are imperative. We tell the program exactly how to increment numbers and what to do in each iteration.
+
+```js
+for(let i = 1; i <= 10; i++ ) {
+    console.log(i)
+}
+```
+
+If we want to immerse ourselves in the functional paradigm, a functional way to think about loops is through recursion. Recursion is a function that calls itself until specific criteria are met.
+
+Essentially, we run some code and call in function until some criteria are met. In the example above, the criteria would be i = 10;
+
+But recursion is abstract and at first it is really hard to understand how to do it properly but for that, I love the quote from Graham Hutton
+<BlockQuote>
+
+Defining recursive functions is like riding a bicycle: it looks easy when someone else is doing it. It may seem impossible when you first try to do it yourself, but it becomes simple and natural with practice.
+</BlockQuote>
+You just need a lot of practice to make it super easy to write them. When you finally get enough practice, it will be exactly the same as riding a bike, and you will do it without much thinking about it.
+
+So, if we wanted the same result as the example above but more functional, we would do a recursion. I don't advise that every loop problem you solve with recursion.
+
+```js
+const logNumbers = (until, from = 0) => {
+    console.log(from)
+
+    if(from < until) {
+        logNumbers(until, from = from + 1)
+    }
+}
+
+logNumbers(10)
+//or
+logNumbers(10, 5)
+```
+
+This example is silly, and you would hopefully never write a recursive function for this to loop through a couple of numbers. However, there are some issues that recursion will most elegantly solve while keeping sanity. If you take an example of any tree traversal or manipulation, you will see that at many times' recursion will simplify your code way much and, in some cases, the only way to solve the problem. This means not necessarily improving the performance but improving readability.
+
+Here is an example of a dumb binary search implementation. Again, it is not the best example to show where recursion will shine the most, but we see it is much cleaner than if we do it with loops.
+
+```js
+const binarySearch = (
+    numbers,
+    target,
+    low = 0,
+    high = numbers.length - 1
+) => {
+    const guess = Math.floor((high + low) / 2)
+
+    if (target == numbers[guess]) return guess
+
+    return target < numbers[guess] ?
+      binarySearch(numbers,  target, low, guess - 1) :
+      binarySearch(numbers, target, guess + 1, high )
+}
+```
+
+One concern with this is the huge memory footprint. Making space on the stack for all function calls would be huge for some problems, but some optimizations, like tail call optimizations, can decrease the memory footprint.
+
+Tail call optimization will allow you to call a function from another function without increasing the call stack. This optimization has been available to JS engines for some time
+
+This is the first part of the series. To be notified when I publish the next part, subscribe to my newsletter.
+In the second part, I will continue exploring Lazy Evaluation and more.

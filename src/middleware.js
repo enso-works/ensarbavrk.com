@@ -1,4 +1,4 @@
-import {  NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 const PUBLIC_FILE = /\.(.*)$/;
 
 export const middleware = async (req, event) => {
@@ -10,6 +10,7 @@ export const middleware = async (req, event) => {
   const sendAnalytics = async () => {
     const slug = pathname.slice(pathname.indexOf('/')) || '/';
 
+    if (!slug.includes('posts')) return NextResponse.next();
     const URL =
       process.env.NODE_ENV === 'production'
         ? 'https:/enso.works/api/viewCount'
