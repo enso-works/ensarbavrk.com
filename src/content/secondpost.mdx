@@ -20,3 +20,127 @@ Introduction
 
 Lazy evaluation, a strategy that defers computation until it's absolutely needed, is not just lazy, it's efficient. It avoids unnecessary work until it's necessary to produce a result, making it a powerful concept in programming.
 Lazy evaluation, despite its name, is a highly practical strategy. It makes the expression 'lazy' until explicitly called to evaluate a result. Which allows us to work with infinite lists and all forms of perceived infinity. This practicality is one of the key benefits of this technique.
+But let's see which mechanisms we can use to defer computation when needed.
+
+In the example, the engine computes the 1 + 1 in the function parameters, and inside the function body, we work with the already computed value.
+
+```js
+const incrementNumber = number => number + 1
+const value = incrementNumber(1 + 1)
+```
+
+Passed arguments in the function 1 + 1 the expression is computed even before we get into the function to compute the number + 2 (arguments passed).
+
+That means that the engine will strictly evaluate expressions instead of lazily. A lazy evaluation would be that we compute 1 + 1 only when needed in the function body, not before invocation.
+
+I know this is a very trivial example, but hopefully, this should show what it would mean to have, by default, strict or lazy evaluation of expressions.
+
+
+<H2>
+    So how can we go around these limitations of strict evaluation inside JavaScript?
+</H2>
+
+If we want to postpone evaluations, we must wrap those expressions into the functions since functions cannot be evaluated before calling them.
+An example of the incrementing would look something like this:
+
+```js
+
+const incrementNumber = number => number() + 1
+const value = incrementNumber(() => 1 + 1)
+```
+
+Hopefully, this will give a perspective on how it is possible to delay the evaluation of in-place expressions.
+
+But let's look at an example of how this technique could benefit us in our daily work. For example, we have a list, and we want to transform it into a list with more suitable data to present to users.
+
+Let's use an example that you would certainly use in your day-to-day life. For example, we have a list of eggs ['🥚', '🥚', '🥚'] but we want a list of chickens to present ['🐓', '🐓', '🐓'].
+
+
+Usually, we would use .map to transform those eggs into the chickens and present them on our page.
+
+```js
+['🥚', '🥚', '🥚'].map(() => '🐓')
+```
+And now we have a list of grown chickens to present.
+But let's say we have a huge list of eggs, like thousands or a hundred thousand eggs, to transform into chickens, and we only need a few chickens on the screen to present at a specific moment. Now, mapping through all the eggs would become resource-consuming without actually being necessary.
+
+So, it is an excellent time to get in touch with our toolbox, use the lazy evaluation technique to help us with this issue,
+we will rewrite the standard mapping function to a lazy one.
+
+```js
+const lazyMap = (arr, fn) =>
+ (start, finish) =>
+  !finish ?
+    fn(arr[start]) :
+    arr.slice(start, finish).map(fn)
+```
+We took an array and mapping function as parameters to our function, which will help us build a lazily evaluated map. We returned a function, which will be our API for accessing our lazy map.
+
+We have two parameters: start and end. If the end is not provided, we get only one item. However, if the end is also provided, we get a full list of items ranging from start to end.
+
+The actual mapping will be done only when we call the function produced by lazyMap. No matter how huge an array we supply to our map function, we will map only those elements that would be affected by start-end parameters.
+
+But can we do even better?
+
+When we execute a mapping function over the values that have already been mapped, we will do the mapping the same as those items that need to be mapped, so it will do double work on those items without any need for that.
+
+
+I briefly mentioned one optimization technique in my previous blog: memoization. Let's remember what that is. Basically, we compute an expression once and store the result for later if we need that result again. So when we want to map the item again, we reach the already stored computed result instead of executing the mapping again.
+
+First, we will create one function to help us remember the computation.
+
+```js
+const memoize = fn => {
+  const map = new Map();
+  return funarg =>
+    map.has(funarg) ?
+      map.get(funarg) :
+      map.set(funarg, fn(funarg)).get(funarg)
+}
+
+```
+
+
+First, we created a function that takes a function, and we will evaluate and store the result. Then, inside the function, we used key and value storage to store computation associations. We return a function that determines if there is already computed value to pull from the key-value store or to evaluate, store, and return the function result.
+
+We already spoke about pure functions in the previous blog post, which is only possible if our functions are idempotent. No matter how we call the function, we will always compute the same outputs if we use the same inputs. That is why we could store arguments as keys and values as an evaluated function that we would memoize.
+
+Now, we will make some minor changes to our lazyMap function to use the above memoize function.
+
+
+```js
+const lazyMap = (arr, fn) => {
+  const memoFn = memoize(fn);
+  return (start, finish?) =>
+      !finish ?
+          memoFn(arr[start]) :
+          arr.slice(start,finish).map(memoFn)
+}
+```
+
+Nothing much has changed, right? We only added a memoize call to our map function, and inside the lazy function, we used a memoized function instead of the original function. Now, just by adding a couple of lines of code, we will see that we would not need to compute the egg's transformation multiple times, but rather just once since pretty much nothing changes. The egg will always produce chicken.
+
+```js
+const mapped =  lazyMap(['🥚', '🥚', '🥚','🥚', '🥚'], () => '🐓')
+
+console.log(
+  mapped(0,2),
+  mapped(1,2)
+  mapped(4)
+)
+```
+I'm quite sure now, after all of these chicken and egg examples, you are wondering about a well-known problem: Which one is older? I am glad you got this far. As a bonus, I will write a function to find a solution to that problem, and we will never wonder again.
+
+
+```js
+const chickenEggProblem = () =>
+  ['🐓', '🥚'].sort()[0] === '🐓' ?
+    'chicken is older' :
+    'egg is older'
+```
+
+You can inspect the page, copy/paste code into a console, run the code, and see for yourself.
+
+Thanks for taking the time to read it.
+
+
