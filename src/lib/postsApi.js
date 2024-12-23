@@ -6,6 +6,7 @@ import * as path from 'path';
 import readingTime from 'reading-time';
 
 const postsDirectory = join(process.cwd(), './src/content');
+
 export const getSlugs = () =>
   sync(`${postsDirectory}/*.mdx`).map(
     (path) => path.split('/').slice(-1).join('').split('.')[0]

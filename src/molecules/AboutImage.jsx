@@ -22,7 +22,7 @@ const Img = ({ path, className }) => (
     loading="lazy"
     proprity={true}
     style={{
-      objectFit: 'contain', // cover, contain, none
+      objectFit: 'cover', // cover, contain, none
     }}
     src={path}
     className={className}
