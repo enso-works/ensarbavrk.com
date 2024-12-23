@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import { BlogPageHeading } from '@/molecules/BlogPageHeading';
-import { BlogSummaryCard } from '@/organisms/BlogSummaryCard';
 import { getAllPosts } from '@/lib/postsApi';
 import Link from 'next/link';
 
@@ -8,6 +7,8 @@ import { H1, P } from '@/atoms/Typography';
 import { AboutImage } from '@/molecules/AboutImage';
 import { useGoogleAnalytics } from '@/lib/useGoogleAnalytics';
 import { getViewCountForAllPosts } from '@/lib/viewCount';
+import { BlogSummaryCardV2 } from '@/organisms/BlogSummaryCard';
+
 export default function Home({ posts }) {
   useGoogleAnalytics();
   return (
@@ -20,8 +21,8 @@ export default function Home({ posts }) {
 
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-24 max-w-3xl">
-        <div className="flex flex-col items-center md:flex-row md:items-start md:gap-12 mb-24">
-          <AboutImage className="rounded-full aspect-square w-48 h-48" />
+        <div className="flex flex-col items-center md:flex-row md:items-start md:gap-12">
+          <AboutImage className="rounded-full aspect-square w-48 h-48 md:mb-0 mb-6" />
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-5xl font-bold mb-6">Hi, I'm Enso.</h1>
             <p className="text-xl text-muted-foreground mb-4">
@@ -43,10 +44,10 @@ export default function Home({ posts }) {
 
       <div className="mt-9">
         <BlogPageHeading />
-        <ul className={'mb-9'}>
+        <ul className={'mb-9 '}>
           {posts.map((post) => {
             return (
-              <BlogSummaryCard
+              <BlogSummaryCardV2
                 key={post.meta.title}
                 meta={post.meta}
                 slug={post.slug}
