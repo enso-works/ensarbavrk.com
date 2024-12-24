@@ -32,7 +32,7 @@ export default function Home({ posts }) {
             <p className="text-lg">
               Currently making the{' '}
               <Link
-                href="https://uva.me"
+                href="https://uva.me/"
                 className="text-sky-500 hover:text-sky-600 transition-colors">
                 @uva.me
               </Link>{' '}
