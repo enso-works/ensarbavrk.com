@@ -7,6 +7,7 @@ import * as React from 'react';
 import { SyntaxHighLight } from '@/atoms/SyntaxHighLight';
 import { getViewCount } from '@/lib/viewCount';
 import { BlockQuote } from '@/atoms/BlockQuote';
+
 const MDX_H1 = ({ children, ...rest }) => (
   <H1 {...rest} className="bg-red-500">
     {children}
@@ -53,7 +54,6 @@ export default function Post({ source, meta }) {
         src={meta.image}
         quality="85"
         loading="lazy"
-        proprity={true}
         className={'rounded-2xl my-20'}
         width={899}
         height={420}
@@ -82,7 +82,6 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const { content, meta } = postFromSlug(params.slug);
   const data = await getViewCount();
-  console.log('DATAAA ', data);
   const mdxSource = await serialize(content, {
     parseFrontmatter: true,
     mdxOptions: {

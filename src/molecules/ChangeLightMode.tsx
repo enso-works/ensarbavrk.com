@@ -6,10 +6,10 @@ import * as React from 'react';
 import { useToggleDarkMode } from '@/lib/useDarkMode';
 
 export const ChangeLightMode = () => {
-  const { toggle, isDarkMode } = useToggleDarkMode();
+  const { toggle } = useToggleDarkMode();
 
   return (
-    <Command.Button className={styles.button} onClick={() => toggle()}>
+    <Command.Button className={styles.button} onClick={toggle}>
       <label className="swap swap-rotate">
         <input type="checkbox" onClick={toggle} />
         <MoonIcon className="swap-on" />

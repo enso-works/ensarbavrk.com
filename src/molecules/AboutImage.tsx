@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useState } from 'react';
 import Image from 'next/image';
-export const AboutImage = ({ className }) => {
+
+export const AboutImage = ({ className }: { className: string }) => {
   const [isHovering, setIsHovered] = useState(false);
   const onMouseEnter = () => setIsHovered(true);
   const onMouseLeave = () => setIsHovered(false);
@@ -16,11 +17,10 @@ export const AboutImage = ({ className }) => {
   );
 };
 
-const Img = ({ path, className }) => (
+const Img = ({ path, className }: { path: string; className: string }) => (
   <Image
     quality="85"
-    loading="lazy"
-    proprity={true}
+    priority={true}
     style={{
       objectFit: 'cover', // cover, contain, none
     }}
