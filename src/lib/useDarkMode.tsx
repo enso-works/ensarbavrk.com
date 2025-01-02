@@ -94,6 +94,7 @@ export const useDarkMode = () => {
   useEffect(() => {
     const storageEvent = (event: StorageEvent) => {
       const { newValue } = event;
+     
       if (newValue && ![DARK_MODE_CLASS_NAME, LIGHT_MODE_CLASS_NAME].includes(newValue)) {
         const newMode = isSystemDarkMode()
           ? DARK_MODE_CLASS_NAME
@@ -101,7 +102,7 @@ export const useDarkMode = () => {
         window.localStorage.setItem(DARK_MODE_KEY, newMode);
         switchDarkModeClasses(newMode);
       } else {
-        switchDarkModeClasses(newValue);
+        switchDarkModeClasses(newValue || '');
       }
     };
     window.addEventListener('storage', storageEvent);
