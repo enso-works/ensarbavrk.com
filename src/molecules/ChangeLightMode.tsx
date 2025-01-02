@@ -1,5 +1,4 @@
 import styles from '@/organisms/nav-bar/Navbar.module.scss';
-import { IF_Else } from '@/atoms/Conditionals';
 import { MoonIcon, SunIcon } from '@/atoms/icons';
 import { Command } from '@/atoms/command/Command';
 import * as React from 'react';

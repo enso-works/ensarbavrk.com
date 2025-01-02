@@ -33,6 +33,10 @@ export const middleware = async (req, event) => {
   // event.waitUntil is the real magic here:
   // it won't wait for sendAnalytics() to finish before continuing the response,
   // so we avoid delaying the user.
-  if (isPageRequest) event.waitUntil(sendAnalytics());
+
+  if (process.env.NODE_ENV !== 'production') {
+    if (isPageRequest) event.waitUntil(sendAnalytics());
+  }
+
   return NextResponse.next();
 };

@@ -5,10 +5,35 @@ const DARK_MODE_KEY = 'blog-theme';
 const LIGHT_MODE_CLASS_NAME = 'light';
 const DARK_MODE_CLASS_NAME = 'dark';
 
+const initDarkMode = () => `
+  const darkMode = localStorage.getItem('blog-theme');
+  const root = document.documentElement;
+  const isUserPrefDarkMode = window.matchMedia('(prefers-color-scheme: dark)')
+    .matches;
+  
+  if(['dark', 'light'].includes(darkMode)){
+    root.classList.add(darkMode);
+  } else {
+    root.classList.add(isUserPrefDarkMode ? 'dark' : 'light');
+  }
+`;
+
+export const DarkModeInitializerScript = () => {
+  return (
+    <Script
+      id="dark-mode-initializer"
+      strategy="beforeInteractive"
+      src={`data:text/javascript;base64,${Buffer.from(initDarkMode()).toString(
+        'base64'
+      )}`}
+    />
+  );
+};
+
 const isSystemDarkMode = () =>
   window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-const switchDarkModeClasses = (classValue) => {
+const switchDarkModeClasses = (classValue: string) => {
   const root = window.document.documentElement;
 
   root.classList.remove(
@@ -21,26 +46,22 @@ const switchDarkModeClasses = (classValue) => {
 
 const setupTransitionClass = () => {
   const documentDiv = document.querySelector('#__next');
-  if (!documentDiv.classList.contains('transition')) {
+  if (documentDiv && !documentDiv.classList.contains('transition')) {
     documentDiv.classList.add('transition', 'ease-in', 'duration-200');
   }
 };
 
 export const useToggleDarkMode = () => {
-  const [shouldToggle, setToggle] = useState(null);
-  const [isDarkMode, setIsDarkMode] = useState(
-    ~(() => {
-      if (typeof window !== 'undefined') {
-        const root = window.document.documentElement;
-        return root.classList.contains(DARK_MODE_CLASS_NAME);
-      } else {
-        return false;
-      }
-    })()
-  );
+  const [shouldToggle, setToggle] = useState<boolean | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const root = window.document.documentElement;
+      return root.classList.contains(DARK_MODE_CLASS_NAME);
+    }
+    return false;
+  });
 
   useEffect(() => {
-    // if init mode avoid switching themes
     if (shouldToggle !== null) {
       const storedMode = window.localStorage.getItem(DARK_MODE_KEY);
       const newModeSelected =
@@ -71,9 +92,9 @@ export const useToggleDarkMode = () => {
 
 export const useDarkMode = () => {
   useEffect(() => {
-    const storageEvent = (event) => {
+    const storageEvent = (event: StorageEvent) => {
       const { newValue } = event;
-      if (![DARK_MODE_CLASS_NAME, LIGHT_MODE_CLASS_NAME].includes(newValue)) {
+      if (newValue && ![DARK_MODE_CLASS_NAME, LIGHT_MODE_CLASS_NAME].includes(newValue)) {
         const newMode = isSystemDarkMode()
           ? DARK_MODE_CLASS_NAME
           : LIGHT_MODE_CLASS_NAME;
@@ -87,29 +108,4 @@ export const useDarkMode = () => {
     setupTransitionClass();
     return () => window.removeEventListener('storage', storageEvent);
   }, []);
-};
-
-const initDarkMode = () => `
-  const darkMode = localStorage.getItem('blog-theme');
-  const root = document.documentElement;
-  const isUserPrefDarkMode = window.matchMedia('(prefers-color-scheme: dark)')
-    .matches;
-  
-  if(['dark', 'light'].includes(darkMode)){
-    root.classList.add(darkMode);
-  } else {
-    root.classList.add(isUserPrefDarkMode ? 'dark' : 'light');
-  }
-`;
-
-export const DarkModeInitializerScript = () => {
-  return (
-    <Script
-      id={'dark-mode-initializer'}
-      strategy="beforeInteractive"
-      src={`data:text/javascript;base64,${Buffer.from(initDarkMode()).toString(
-        'base64'
-      )}`}
-    />
-  );
 };
