@@ -16,6 +16,7 @@
     "@next/mdx": "^12.1.2",
     "@next/third-parties": "^14.2.3",
     "@supabase/supabase-js": "^2.43.2",
+    "@types/glob": "^8.1.0",
     "classnames": "^2.3.1",
     "glob": "^7.2.0",
     "gray-matter": "^4.0.3",
@@ -31,6 +32,11 @@
     "remark-frontmatter": "^5.0.0"
   },
   "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "8.18.2",
+    "@typescript-eslint/parser": "8.18.2",
     "autoprefixer": "^10.4.2",
     "daisyui": "^4.11.1",
     "eslint": "9.17.0",
@@ -40,11 +46,6 @@
     "prettier": "2.5.1",
     "sass": "^1.49.9",
     "tailwindcss": "^3.0.22",
-    "@types/node": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "8.18.2",
-    "@typescript-eslint/parser": "8.18.2",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
     "typescript": "^5.0.0"
   }
 }
