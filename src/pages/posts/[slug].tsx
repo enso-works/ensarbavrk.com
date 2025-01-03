@@ -7,6 +7,9 @@ import * as React from 'react';
 import { SyntaxHighLight } from '@/atoms/SyntaxHighLight';
 import { getViewCount } from '@/lib/viewCount';
 import { BlockQuote } from '@/atoms/BlockQuote';
+import { Eye } from 'lucide-react';
+import { Clock } from 'lucide-react';
+import { CalendarDays } from 'lucide-react';
 
 const MDX_H1 = ({ children, ...rest }) => (
   <H1 {...rest} className="bg-red-500">
@@ -59,20 +62,20 @@ export default function Post({ source, meta }) {
         height={420}
         alt="enso with his cat"
       />
-       <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <CalendarDays className="h-4 w-4" />
-            <span>{meta.date}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Clock className="h-4 w-4" />
-            <span>{meta.readingTime}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Eye className="h-4 w-4" />
-            <span>{meta.views.toLocaleString()} views</span>
-          </div>
+      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+        <div className="flex items-center gap-1">
+          <CalendarDays className="h-4 w-4" />
+          <span>{meta.date}</span>
         </div>
+        <div className="flex items-center gap-1">
+          <Clock className="h-4 w-4" />
+          <span>{meta.readingTime}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <Eye className="h-4 w-4" />
+          <span>{meta.views.toLocaleString()} views</span>
+        </div>
+      </div>
       <H1 className="mb-12">{meta.title}</H1>
 
       <MDXRemote {...source} components={components} />
