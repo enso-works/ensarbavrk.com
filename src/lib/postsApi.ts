@@ -26,7 +26,7 @@ export interface Post {
 }
 
 export interface PostWithViews extends Post {
-  views: { views: number; slug: string };
+  views: { views: number };
 }
 
 const postsDirectory = join(process.cwd(), './src/content');
