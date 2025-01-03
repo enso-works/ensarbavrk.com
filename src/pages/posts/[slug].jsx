@@ -59,6 +59,20 @@ export default function Post({ source, meta }) {
         height={420}
         alt="enso with his cat"
       />
+       <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <CalendarDays className="h-4 w-4" />
+            <span>{meta.date}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Clock className="h-4 w-4" />
+            <span>{meta.readingTime}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Eye className="h-4 w-4" />
+            <span>{meta.views.toLocaleString()} views</span>
+          </div>
+        </div>
       <H1 className="mb-12">{meta.title}</H1>
 
       <MDXRemote {...source} components={components} />
