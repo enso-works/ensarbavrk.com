@@ -11,22 +11,49 @@ import { Eye } from 'lucide-react';
 import { Clock } from 'lucide-react';
 import { CalendarDays } from 'lucide-react';
 
-const MDX_H1 = ({ children, ...rest }) => (
+interface MDXComponentProps {
+  children: React.ReactNode;
+  [key: string]: any;
+}
+
+interface CodeProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+interface PreProps {
+  children: React.ReactNode;
+}
+
+const MDX_H1 = ({ children, ...rest }: MDXComponentProps) => (
   <H1 {...rest} className="bg-red-500">
     {children}
   </H1>
 );
-const MDX_H2 = ({ children, ...rest }) => (
+
+const MDX_H2 = ({ children, ...rest }: MDXComponentProps) => (
   <H2 {...rest} className="my-12 max-w-readable">
     {children}
   </H2>
 );
 
-const MDX_P = ({ children, ...rest }) => (
+const MDX_P = ({ children, ...rest }: MDXComponentProps) => (
   <P {...rest} className="max-w-readable leading-8 ">
     {children}
   </P>
 );
+
+const MDX_Code = ({ children, className }: CodeProps) => {
+  return className ? (
+    <SyntaxHighLight className={className}>{children}</SyntaxHighLight>
+  ) : (
+    <code className="language-text">{children}</code>
+  );
+};
+
+const MDX_Pre = ({ children }: PreProps) => {
+  return <div className="mockup-code my-12">{children}</div>;
+};
 
 const components = {
   H1: MDX_H1,
@@ -35,19 +62,19 @@ const components = {
   p: MDX_P,
   Small,
   BlockQuote,
-  code: ({ children, className }) => {
-    return className ? (
-      <SyntaxHighLight className={className}>{children}</SyntaxHighLight>
-    ) : (
-      <code className="language-text">{children}</code>
-    );
-  },
-  pre: ({ children }) => {
-    return <div className="mockup-code my-12">{children}</div>;
-  },
+  code: MDX_Code,
+  pre: MDX_Pre,
 };
 
-export default function Post({ source, meta }) {
+export default function Post({
+  source,
+  meta,
+  views,
+}: {
+  source: any;
+  meta: any;
+  views: number;
+}) {
   return (
     <div className="flex flex-1 flex-col min-w-full">
       <Image
@@ -73,7 +100,7 @@ export default function Post({ source, meta }) {
         </div>
         <div className="flex items-center gap-1">
           <Eye className="h-4 w-4" />
-          <span>{meta.views.toLocaleString()} views</span>
+          <span>{views.toLocaleString()} views</span>
         </div>
       </div>
       <H1 className="mb-12">{meta.title}</H1>
@@ -85,20 +112,18 @@ export default function Post({ source, meta }) {
 export async function getStaticPaths() {
   const slugs = getSlugs();
 
-  // Generate the paths for each post
   const paths = slugs.map((slug) => ({
     params: { slug },
   }));
 
-  // Return the paths and fallback setting
   return {
     paths,
-    fallback: false, // Can also be true or 'blocking'
+    fallback: false, 
   };
 }
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: { params: { slug: string } }) {
   const { content, meta } = postFromSlug(params.slug);
-  const data = await getViewCount();
+  const data = await getViewCount(`/posts/${params.slug}`);
   const mdxSource = await serialize(content, {
     parseFrontmatter: true,
     mdxOptions: {
@@ -110,6 +135,7 @@ export async function getStaticProps({ params }) {
     props: {
       source: mdxSource,
       meta,
+      views: data[0]?.views,
     },
   };
 }

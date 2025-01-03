@@ -1,15 +1,15 @@
 import Head from 'next/head';
 import { BlogPageHeading } from '@/molecules/BlogPageHeading';
-import { getAllPosts } from '@/lib/postsApi';
+import { getAllPosts, Post } from '@/lib/postsApi';
 import Link from 'next/link';
 
-import { H1, P } from '@/atoms/Typography';
 import { AboutImage } from '@/molecules/AboutImage';
 import { useGoogleAnalytics } from '@/lib/useGoogleAnalytics';
 import { getViewCountForAllPosts } from '@/lib/viewCount';
 import { BlogSummaryCardV2 } from '@/organisms/BlogSummaryCard';
+import { PostWithViews } from '@/lib/postsApi';
 
-export default function Home({ posts }) {
+export default function Home({ posts }: { posts: PostWithViews[] }) {
   useGoogleAnalytics();
   return (
     <div>
@@ -49,9 +49,7 @@ export default function Home({ posts }) {
             return (
               <BlogSummaryCardV2
                 key={post.meta.title}
-                meta={post.meta}
-                slug={post.slug}
-                views={post.views}
+                post={post}
               />
             );
           })}
@@ -63,7 +61,6 @@ export default function Home({ posts }) {
 
 export async function getStaticProps() {
   const posts = getAllPosts();
-
   const data = await getViewCountForAllPosts();
 
   const mappedPosts = posts.map((post) => {
