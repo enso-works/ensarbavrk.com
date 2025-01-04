@@ -12,7 +12,7 @@ const config: Config = {
       },
       colors: {
         primary: {
-          DEFAULT: 'var(--color-bg-primary)',
+          DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
         },
         bgPrimary: 'var(--color-bg-primary)',
@@ -62,9 +62,6 @@ const config: Config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
-    },
-    fontFamily: {
-      sans: ['Quattrocento Sans"', 'sans-serif'],
     },
   },
   plugins: [daisyui, require('tailwindcss-animate')],

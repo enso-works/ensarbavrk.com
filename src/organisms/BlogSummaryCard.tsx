@@ -20,15 +20,15 @@ export const BlogSummaryCardV2: React.FC<BlogSummaryCardV2Props> = ({
       <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
         <div className="flex items-center gap-1">
           <CalendarDays className="w-4 h-4" />
-          <Small className="text-textSecondary">{post.meta.publishedAt}</Small>
+          <Small>{post.meta.publishedAt}</Small>
         </div>
         <div className="flex items-center gap-1">
           <Clock className="w-4 h-4" />
-          <Small className="text-textSecondary">{post.readingTime.time}</Small>
+          <Small>{post.readingTime.time}</Small>
         </div>
         <div className="flex items-center gap-1">
           <Eye className="w-4 h-4" />
-          <View className="text-textSecondary" views={post.views.views} />
+          <View views={post.views.views} />
         </div>
       </div>
       <h3 className="text-2xl font-bold leading-tight mb-2 group-hover:text-primary transition-colors">
