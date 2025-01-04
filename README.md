@@ -18,8 +18,3 @@ npm run dev
 # or
 yarn dev
 ```
-
-## Project Design 
-
-- [📚] Command pallet command(ctrl)+k with keyboard navigation | Not in use anymore since there is no navigation on the site
-- [☀️] Light and Dark mode toggle custom NextJS component 
