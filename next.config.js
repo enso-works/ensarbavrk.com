@@ -18,7 +18,7 @@ const withMDX = require('@next/mdx')({
 
 module.exports = withImages(
   withMDX({
-    pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+    pageExtensions: ['md', 'mdx', 'tsx'],
     reactStrictMode: true,
     eslint: {
       dirs: ['src'],
