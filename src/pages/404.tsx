@@ -10,7 +10,7 @@ export default function Page() {
     const fetchRandomGif = async () => {
       try {
         const response = await fetch(
-          `https://api.giphy.com/v1/gifs/random?api_key=4tnqe7BZv9r72d6bl62H51JZ1SVhgZXY&tag=confused&rating=g`
+          `https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}&tag=confused&rating=g`
         );
         const data = await response.json();
         setGifUrl(data.data.images.original.url);
