@@ -9,6 +9,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: '*.giphy.com',
         pathname: '/media/**',
+      },   {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        pathname: '/enso-works/**',
       },
     ],
   },

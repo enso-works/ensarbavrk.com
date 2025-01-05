@@ -9,7 +9,7 @@ export const PostMeta = ({
   postWithViews: PostWithViews;
 }) => {
   return (
-    <div className="max-w-[800px] flex items-center gap-4 text-sm text-muted-foreground mb-12">
+    <div className="max-w-[800px] flex items-center gap-4 text-sm text-muted-foreground">
       <div className="flex items-center gap-1">
         <CalendarDays className="h-4 w-4" />
         <span>{postWithViews.meta.publishedAt}</span>

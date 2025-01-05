@@ -17,23 +17,23 @@ export default function Post({ source, postWithViews }: PostProps) {
   return (
     <div className="flex flex-1 flex-col min-w-full items-center">
       <div className="flex flex-col justify-center max-w-[50rem]">
-        <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
-          <Image
-            style={{
-              objectFit: 'contain',
-            }}
-            src={postWithViews.meta.image}
-            quality="85"
-            loading="lazy"
-            className={'rounded-2xl mt-20 mb-6'}
-            width={899}
-            height={420}
-            alt="enso with his cat"
-          />
-        </div>
-        <PostMeta postWithViews={postWithViews} />
         <article className="max-w-[680px] mx-auto px-4 py-12">
           <H1 className="mb-4">{postWithViews.meta.title}</H1>
+          <PostMeta postWithViews={postWithViews} />
+          <div className="py-4 mb-6">
+            <Image
+              style={{
+                objectFit: 'contain',
+              }}
+              src={postWithViews.meta.image}
+              quality="85"
+              loading="lazy"
+              className="rounded-2xl"
+              width={899}
+              height={420}
+              alt="enso with his cat"
+            />
+          </div>
           <MDXRemote {...source} components={components} />
         </article>
       </div>
