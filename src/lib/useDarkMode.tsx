@@ -39,7 +39,7 @@ export const DarkModeInitializerScript = () => {
           __html: initDarkMode(),
         }}
       />
-      <script
+      <Script
         id="dark-mode-initializer"
         strategy="beforeInteractive"
         src={`data:text/javascript;base64,${Buffer.from(initDarkMode()).toString('base64')}`}
