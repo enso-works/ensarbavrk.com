@@ -95,8 +95,10 @@ const MDX_H2 = ({ children, ...rest }: MDXComponentProps) => {
 };
 
 const MDX_LEAD = ({ children, ...rest }: MDXComponentProps) => {
-  if (React.isValidElement(children) && children.type === 'p') {
-    return children;
+  if (React.isValidElement(children) && (children.type === 'p' || children.type === P)) {
+    return <p {...rest} className="text-xl text-muted-foreground mt-8">
+      {children.props.children}
+    </p>;
   }
 
   return (
@@ -107,14 +109,16 @@ const MDX_LEAD = ({ children, ...rest }: MDXComponentProps) => {
 };
 
 const MDX_P = ({ children, ...rest }: MDXComponentProps) => {
-  if (React.isValidElement(children) && children.type === 'p') {
-    return children;
+  if (React.isValidElement(children) && (children.type === 'p' || children.type === P)) {
+    return <p {...rest} className="max-w-readable leading-8">
+      {children.props.children}
+    </p>;
   }
   
   return (
-    <P {...rest} className="max-w-readable leading-8">
+    <p {...rest} className="max-w-readable leading-8">
       {children}
-    </P>
+    </p>
   );
 };
 

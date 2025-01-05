@@ -6,27 +6,45 @@ const LIGHT_MODE_CLASS_NAME = 'light';
 const DARK_MODE_CLASS_NAME = 'dark';
 
 const initDarkMode = () => `
-  const darkMode = localStorage.getItem('blog-theme');
-  const root = document.documentElement;
-  const isUserPrefDarkMode = window.matchMedia('(prefers-color-scheme: dark)')
-    .matches;
-  
-  if(['dark', 'light'].includes(darkMode)){
-    root.classList.add(darkMode);
-  } else {
-    root.classList.add(isUserPrefDarkMode ? 'dark' : 'light');
-  }
+  (function() {
+    try {
+      const darkMode = localStorage.getItem('blog-theme');
+      const root = document.documentElement;
+      const isUserPrefDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      // Remove any existing theme class first
+      root.classList.remove('light', 'dark');
+      
+      if(['dark', 'light'].includes(darkMode)) {
+        root.classList.add(darkMode);
+        root.style.setProperty('color-scheme', darkMode);
+      } else {
+        const initialTheme = isUserPrefDarkMode ? 'dark' : 'light';
+        root.classList.add(initialTheme);
+        root.style.setProperty('color-scheme', initialTheme);
+        localStorage.setItem('blog-theme', initialTheme);
+      }
+    } catch (e) {
+      // Fallback if localStorage is not available
+      document.documentElement.classList.add('light');
+    }
+  })();
 `;
 
 export const DarkModeInitializerScript = () => {
   return (
-    <Script
-      id="dark-mode-initializer"
-      strategy="beforeInteractive"
-      src={`data:text/javascript;base64,${Buffer.from(initDarkMode()).toString(
-        'base64'
-      )}`}
-    />
+    <>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: initDarkMode(),
+        }}
+      />
+      <script
+        id="dark-mode-initializer"
+        strategy="beforeInteractive"
+        src={`data:text/javascript;base64,${Buffer.from(initDarkMode()).toString('base64')}`}
+      />
+    </>
   );
 };
 
