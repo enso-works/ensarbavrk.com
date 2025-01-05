@@ -1,5 +1,20 @@
 const withImages = require('next-images');
-const withMDX = require('@next/mdx')({
+const createMDX = require('@next/mdx')
+
+const nextConfig = {
+  pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.giphy.com',
+        pathname: '/media/**',
+      },
+    ],
+  },
+};
+
+const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
     remarkPlugins: [
@@ -16,12 +31,5 @@ const withMDX = require('@next/mdx')({
   },
 });
 
-module.exports = withImages(
-  withMDX({
-    pageExtensions: ['md', 'mdx', 'tsx'],
-    reactStrictMode: true,
-    eslint: {
-      dirs: ['src'],
-    },
-  })
-);
+module.exports = withMDX(nextConfig);
+
