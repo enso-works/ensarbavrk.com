@@ -89,3 +89,8 @@
     --chart-5: 340 75% 55%;
   }
 }
+
+@keyframes pointing {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-4px); }
+}
