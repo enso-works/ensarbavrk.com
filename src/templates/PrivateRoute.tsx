@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 

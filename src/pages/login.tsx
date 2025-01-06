@@ -1,5 +1,5 @@
+import { useAuth } from '@/lib/AuthContext'
 import { useState } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
 import { toast } from 'react-hot-toast'
 
 export default function Login() {

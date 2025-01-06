@@ -1,5 +1,5 @@
-import { PrivateRoute } from '@/components/PrivateRoute'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from "@/lib/AuthContext"
+import { PrivateRoute } from "@/templates/PrivateRoute"
 
 export default function Dashboard() {
   const { user, signOut } = useAuth()

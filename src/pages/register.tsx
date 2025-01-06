@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/router'
+import { useAuth } from '@/lib/AuthContext'
 
 export default function Register() {
   const [email, setEmail] = useState('')
