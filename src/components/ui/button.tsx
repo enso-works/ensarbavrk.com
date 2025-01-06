@@ -5,20 +5,22 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 dark:focus-visible:ring-zinc-300",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[--color-text-accent] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
-          "bg-zinc-900 text-zinc-50 shadow hover:bg-zinc-900/90 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90",
+          "bg-[--color-text-accent] text-[--color-bg-primary] shadow hover:bg-[--color-text-accent]/90",
         destructive:
-          "bg-red-500 text-zinc-50 shadow-sm hover:bg-red-500/90 dark:bg-red-900 dark:text-zinc-50 dark:hover:bg-red-900/90",
+          "bg-red-500 text-[--color-bg-primary] shadow-sm hover:bg-red-500/90",
         outline:
-          "border border-zinc-200 bg-white shadow-sm hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50",
+          "border border-[--color-text-secondary] bg-[--color-bg-primary] text-[--color-text-primary] shadow-sm hover:bg-[--color-text-secondary]/10",
         secondary:
-          "bg-zinc-100 text-zinc-900 shadow-sm hover:bg-zinc-100/80 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-800/80",
-        ghost: "hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50",
-        link: "text-zinc-900 underline-offset-4 hover:underline dark:text-zinc-50",
+          "bg-[--color-text-secondary] text-[--color-bg-primary] shadow-sm hover:bg-[--color-text-secondary]/80",
+        ghost: 
+          "text-[--color-text-primary] hover:bg-[--color-text-secondary]/10",
+        link: 
+          "text-[--color-text-accent] underline-offset-4 hover:underline",
       },
       size: {
         default: "h-9 px-4 py-2",

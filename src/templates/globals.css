@@ -6,11 +6,33 @@
   @apply light text-text;
 }
 
+/* Override Chrome's autofill styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: var(--color-text-primary);
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px var(--color-bg-primary);
+}
+
+/* Optional: Override Firefox's autofill styles */
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+input:autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: var(--color-text-primary);
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px var(--color-bg-primary);
+}
+
 .dark {
   --color-bg-primary: #313131;
   --color-text-primary: #ffffff;
   --color-text-secondary: #edf2f7;
-  --color-text-accent: #00A7DC;
+  --color-text-accent: #00a7dc;
 }
 
 .light {
@@ -19,7 +41,6 @@
   --color-text-secondary: #464646;
   --color-text-accent: #00a7dc;
 }
-
 
 #__next {
   @apply h-full flex flex-1 justify-center bg-bgPrimary;
@@ -31,8 +52,6 @@
   width: 100%;
 }
 
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -41,7 +60,7 @@
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary:194, 100%, 43%;
+    --primary: 194, 100%, 43%;
     --primary-foreground: 355.7 100% 97.3%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
@@ -69,7 +88,7 @@
     --card-foreground: 0 0% 95%;
     --popover: 0 0% 9%;
     --popover-foreground: 0 0% 95%;
-    --primary:194, 100%, 43%;
+    --primary: 194, 100%, 43%;
     --primary-foreground: 144.9 80.4% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
@@ -91,6 +110,11 @@
 }
 
 @keyframes pointing {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-4px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-4px);
+  }
 }
