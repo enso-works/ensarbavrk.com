@@ -1,4 +1,4 @@
-import { privateClient } from '@/lib/supabaseClient';
+import { getPrivateClient } from '@/lib/supabaseClient';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -6,8 +6,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    console.log('++++++++++++ WE WILl send req.body', req.body);
-    const data = await privateClient.rpc('increment_views', {
+    const data = await getPrivateClient().rpc('increment_views', {
       page_slug: req.body.slug,
     });
 

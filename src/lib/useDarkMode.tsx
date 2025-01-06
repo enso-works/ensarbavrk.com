@@ -42,24 +42,47 @@ export const DarkModeInitializerScript = () => {
       <Script
         id="dark-mode-initializer"
         strategy="beforeInteractive"
-        src={`data:text/javascript;base64,${Buffer.from(initDarkMode()).toString('base64')}`}
+        src={`data:text/javascript;base64,${Buffer.from(
+          initDarkMode()
+        ).toString('base64')}`}
       />
     </>
   );
 };
 
-const isSystemDarkMode = () =>
-  window.matchMedia('(prefers-color-scheme: dark)').matches;
-
 const switchDarkModeClasses = (classValue: string) => {
-  const root = window.document.documentElement;
+  if (typeof window === 'undefined') return;
 
-  root.classList.remove(
+  if (![DARK_MODE_CLASS_NAME, LIGHT_MODE_CLASS_NAME].includes(classValue)) {
+    console.error('Invalid class value provided:', classValue);
+    return;
+  }
+
+  const root = window.document.documentElement;
+  const classToRemove =
     classValue === DARK_MODE_CLASS_NAME
       ? LIGHT_MODE_CLASS_NAME
-      : DARK_MODE_CLASS_NAME
-  );
-  root.classList.add(classValue);
+      : DARK_MODE_CLASS_NAME;
+
+  try {
+    if (root.classList.contains(classToRemove)) {
+      root.classList.remove(classToRemove);
+    }
+
+    if (!root.classList.contains(classValue)) {
+      root.classList.add(classValue);
+    }
+
+    root.style.setProperty('color-scheme', classValue);
+  } catch (error) {
+    console.error('Error switching dark mode classes:', error);
+    if (
+      !root.classList.contains(LIGHT_MODE_CLASS_NAME) &&
+      !root.classList.contains(DARK_MODE_CLASS_NAME)
+    ) {
+      root.classList.add(LIGHT_MODE_CLASS_NAME);
+    }
+  }
 };
 
 const setupTransitionClass = () => {
@@ -112,16 +135,7 @@ export const useDarkMode = () => {
   useEffect(() => {
     const storageEvent = (event: StorageEvent) => {
       const { newValue } = event;
-     
-      if (newValue && ![DARK_MODE_CLASS_NAME, LIGHT_MODE_CLASS_NAME].includes(newValue)) {
-        const newMode = isSystemDarkMode()
-          ? DARK_MODE_CLASS_NAME
-          : LIGHT_MODE_CLASS_NAME;
-        window.localStorage.setItem(DARK_MODE_KEY, newMode);
-        switchDarkModeClasses(newMode);
-      } else {
-        switchDarkModeClasses(newValue || '');
-      }
+      switchDarkModeClasses(newValue || LIGHT_MODE_CLASS_NAME);
     };
     window.addEventListener('storage', storageEvent);
     setupTransitionClass();

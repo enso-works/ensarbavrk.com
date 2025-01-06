@@ -1,5 +1,4 @@
 import { publicClient } from '@/lib/supabaseClient';
-import { log } from 'console';
 
 export const getViewCount = async (
   slug: string

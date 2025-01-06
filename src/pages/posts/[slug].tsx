@@ -17,7 +17,7 @@ export default function Post({ source, postWithViews }: PostProps) {
   return (
     <div className="flex flex-1 flex-col min-w-full items-center">
       <div className="flex flex-col justify-center max-w-[50rem]">
-        <article className="max-w-[680px] mx-auto px-4 py-12">
+        <article className="max-w-[680px] mx-auto px-4 pb-12 pt-24">
           <H1 className="mb-4">{postWithViews.meta.title}</H1>
           <PostMeta postWithViews={postWithViews} />
           <div className="py-4 mb-6">
