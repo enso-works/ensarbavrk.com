@@ -42,7 +42,9 @@ export const DarkModeInitializerScript = () => {
       <Script
         id="dark-mode-initializer"
         strategy="beforeInteractive"
-        src={`data:text/javascript;base64,${Buffer.from(initDarkMode()).toString('base64')}`}
+        src={`data:text/javascript;base64,${Buffer.from(
+          initDarkMode()
+        ).toString('base64')}`}
       />
     </>
   );
@@ -112,15 +114,19 @@ export const useDarkMode = () => {
   useEffect(() => {
     const storageEvent = (event: StorageEvent) => {
       const { newValue } = event;
-     
-      if (newValue && ![DARK_MODE_CLASS_NAME, LIGHT_MODE_CLASS_NAME].includes(newValue)) {
-        const newMode = isSystemDarkMode()
-          ? DARK_MODE_CLASS_NAME
-          : LIGHT_MODE_CLASS_NAME;
-        window.localStorage.setItem(DARK_MODE_KEY, newMode);
-        switchDarkModeClasses(newMode);
+      if (
+        !newValue ||
+        ![DARK_MODE_CLASS_NAME, LIGHT_MODE_CLASS_NAME].includes(newValue)
+      ) {
+        window.localStorage.setItem(
+          DARK_MODE_KEY,
+          isSystemDarkMode() ? DARK_MODE_CLASS_NAME : LIGHT_MODE_CLASS_NAME
+        );
+        switchDarkModeClasses(
+          isSystemDarkMode() ? DARK_MODE_CLASS_NAME : LIGHT_MODE_CLASS_NAME
+        );
       } else {
-        switchDarkModeClasses(newValue || '');
+        switchDarkModeClasses(newValue);
       }
     };
     window.addEventListener('storage', storageEvent);
