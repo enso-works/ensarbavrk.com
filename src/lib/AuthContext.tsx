@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { AuthError, User } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/router';
 import { publicClient } from './supabaseClient';
 import { promiseDelay } from './utils';

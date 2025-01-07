@@ -1,54 +1,8 @@
 import { useEffect, useState } from 'react';
-import Script from 'next/script';
 
 const DARK_MODE_KEY = 'blog-theme';
 const LIGHT_MODE_CLASS_NAME = 'light';
 const DARK_MODE_CLASS_NAME = 'dark';
-
-const initDarkMode = () => `
-  (function() {
-    try {
-      const darkMode = localStorage.getItem('blog-theme');
-      const root = document.documentElement;
-      const isUserPrefDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
-      // Remove any existing theme class first
-      root.classList.remove('light', 'dark');
-      
-      if(['dark', 'light'].includes(darkMode)) {
-        root.classList.add(darkMode);
-        root.style.setProperty('color-scheme', darkMode);
-      } else {
-        const initialTheme = isUserPrefDarkMode ? 'dark' : 'light';
-        root.classList.add(initialTheme);
-        root.style.setProperty('color-scheme', initialTheme);
-        localStorage.setItem('blog-theme', initialTheme);
-      }
-    } catch (e) {
-      // Fallback if localStorage is not available
-      document.documentElement.classList.add('light');
-    }
-  })();
-`;
-
-export const DarkModeInitializerScript = () => {
-  return (
-    <>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: initDarkMode(),
-        }}
-      />
-      <Script
-        id="dark-mode-initializer"
-        strategy="beforeInteractive"
-        src={`data:text/javascript;base64,${Buffer.from(
-          initDarkMode()
-        ).toString('base64')}`}
-      />
-    </>
-  );
-};
 
 const switchDarkModeClasses = (classValue: string) => {
   if (typeof window === 'undefined') return;
@@ -74,14 +28,9 @@ const switchDarkModeClasses = (classValue: string) => {
     }
 
     root.style.setProperty('color-scheme', classValue);
+    localStorage.setItem(DARK_MODE_KEY, classValue);
   } catch (error) {
     console.error('Error switching dark mode classes:', error);
-    if (
-      !root.classList.contains(LIGHT_MODE_CLASS_NAME) &&
-      !root.classList.contains(DARK_MODE_CLASS_NAME)
-    ) {
-      root.classList.add(LIGHT_MODE_CLASS_NAME);
-    }
   }
 };
 
@@ -111,7 +60,6 @@ export const useToggleDarkMode = () => {
           : DARK_MODE_CLASS_NAME;
 
       try {
-        window.localStorage.setItem(DARK_MODE_KEY, newModeSelected);
         switchDarkModeClasses(newModeSelected);
         setIsDarkMode(newModeSelected === DARK_MODE_CLASS_NAME);
       } catch (e) {
@@ -133,12 +81,6 @@ export const useToggleDarkMode = () => {
 
 export const useDarkMode = () => {
   useEffect(() => {
-    const storageEvent = (event: StorageEvent) => {
-      const { newValue } = event;
-      switchDarkModeClasses(newValue || LIGHT_MODE_CLASS_NAME);
-    };
-    window.addEventListener('storage', storageEvent);
     setupTransitionClass();
-    return () => window.removeEventListener('storage', storageEvent);
   }, []);
 };

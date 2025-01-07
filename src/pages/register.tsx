@@ -83,13 +83,32 @@ export default function RegisterV2() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { signUp } = useAuth();
+  const router = useRouter();
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsLoading(false);
+    
+    try {
+      const formData = new FormData(event.target as HTMLFormElement);
+      const email = formData.get('email') as string;
+      const password = formData.get('password') as string;
+      const confirmPassword = formData.get('confirmPassword') as string;
+
+      if (password !== confirmPassword) {
+        toast.error('Passwords do not match');
+        return;
+      }
+
+      await signUp(email, password);
+      toast.success('Registration successful! Please check your email to verify your account.');
+      router.push('/login');
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const handleUnsupportedMethod = (method: string) => {
@@ -219,6 +238,7 @@ export default function RegisterV2() {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="m@example.com"
                 required
@@ -232,6 +252,7 @@ export default function RegisterV2() {
               <div className="relative">
                 <Input
                   id="password"
+                  name="password"
                   type={showPassword ? 'text' : 'password'}
                   required
                   disabled={isLoading}
