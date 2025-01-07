@@ -28,7 +28,7 @@ export default function Profile() {
     const newSearchParams = new URLSearchParams(searchParams);
 
     if (open) {
-      newSearchParams.set('security', '');
+      newSearchParams.set('security', 'true');
     } else {
       newSearchParams.delete('security');
     }
@@ -42,7 +42,7 @@ export default function Profile() {
 
   return (
     <PrivateRoute>
-      <div className="space-y-6 p-6">
+      <div className="space-y-6 p-4 sm:p-6 max-w-[80rem]">
         <div>
           <h3 className="text-lg font-medium">Profile</h3>
           <p className="text-sm text-muted-foreground">
@@ -50,13 +50,11 @@ export default function Profile() {
           </p>
         </div>
         <Separator />
-        <div className="flex flex-1 flex-row gap-6 w-full">
-          <div className="w-1/2">
+        <div className="flex flex-1 flex-col md:flex-row  gap-6 w-full">
             <ProfileForm
               onSecurityClick={() => toggleSecurityCard(true)}
               isSecurityCardOpen={isSecurityCardOpen}
             />
-          </div>
           <AnimatePresence>
             {isSecurityCardOpen && (
               <SecurityForm onClose={() => toggleSecurityCard(false)} />

@@ -55,12 +55,15 @@ export function SecurityForm({ onClose }: { onClose: () => void }) {
         <Button
           variant="ghost"
           size="icon"
-          className="absolute right-4 top-4"
+          className="absolute right-2 top-2 lg:right-4 lg:top-4"
           onClick={onClose}>
           <X className="h-4 w-4" />
         </Button>
-        <CardHeader>
+        <CardHeader className="space-y-1">
           <CardTitle>Security</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Update your password and security settings
+          </p>
         </CardHeader>
         <CardContent>
           <Form {...form}>
