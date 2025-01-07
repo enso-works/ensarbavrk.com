@@ -8,12 +8,22 @@ import {
   Grid,
   Settings,
   HelpCircle,
+  LogOut,
+  User,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/AuthContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function Sidebar() {
   const router = useRouter();
+  const { signOut } = useAuth();
 
   return (
     <aside className="w-[60px] border-r bg-background flex flex-col items-center py-4 gap-4">
@@ -39,9 +49,23 @@ export function Sidebar() {
         <button className="p-2 rounded-lg hover:bg-muted">
           <HelpCircle className="w-5 h-5 text-muted-foreground" />
         </button>
-        <button className="p-2 rounded-lg hover:bg-muted">
-          <Settings className="w-5 h-5 text-muted-foreground" />
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="p-2 rounded-lg hover:bg-muted">
+              <Settings className="w-5 h-5 text-muted-foreground" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="right" align="start" className="w-48">
+            <DropdownMenuItem onClick={() => router.push('/app/profile')}>
+              <User className="mr-2 h-4 w-4" />
+              <span>Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signOut()}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Logout</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </aside>
   );
