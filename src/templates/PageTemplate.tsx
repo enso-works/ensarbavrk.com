@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { NavBar } from '@/organisms/nav-bar/NavBar';
-import { Footer } from '@/molecules/Footer';
+import { Footer } from '@/organisms/Footer';
 import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/router';
 import classNames from 'classnames';
