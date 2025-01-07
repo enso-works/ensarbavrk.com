@@ -5,48 +5,48 @@ import { Footer } from '@/molecules/Footer';
 import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/router';
 import classNames from 'classnames';
+import { Sidebar } from '@/organisms/Sidebar';
+import { AppHeader } from '@/organisms/AppHeader';
 
 const publicRoutes = ['/login', '/register', '/forgot-password'];
+const appRoutes = ['/dashboard'];
 
-interface PageTemplateProps extends React.PropsWithChildren {
-  requireAuth?: boolean;
-}
+interface PageTemplateProps extends React.PropsWithChildren {}
 
-export const PageTemplate = ({
-  children,
-  requireAuth = false,
-}: PageTemplateProps) => {
+const AppTemplate = ({ children }: PageTemplateProps) => {
+  return (
+    <div className="flex h-screen">
+      <Sidebar />
+      <div className="flex-1 flex flex-col">
+        <AppHeader />
+        <main className="flex-1 overflow-auto">{children}</main>
+      </div>
+    </div>
+  );
+};
+
+export const PageTemplate = ({ children }: PageTemplateProps) => {
   const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!loading) {
-      // Only run checks after auth is initialized
-      // Redirect to login if accessing protected route without auth
-      if (requireAuth && !user) {
-        router.replace('/login');
-        return;
-      }
-
-      // Redirect to dashboard if accessing auth pages while logged in
       if (user && publicRoutes.includes(router.pathname)) {
         router.replace('/dashboard');
         return;
       }
     }
-  }, [user, loading, router, requireAuth]);
+  }, [user, loading, router]);
 
-  // Show nothing while redirecting or checking auth
-  if (
-    loading ||
-    (user && publicRoutes.includes(router.pathname)) ||
-    (!user && requireAuth)
-  ) {
+  if (loading || (user && publicRoutes.includes(router.pathname))) {
     return null;
   }
 
-  // Don't render nav/footer on auth pages
   const isAuthPage = publicRoutes.includes(router.pathname);
+
+  if (appRoutes.includes(router.pathname)) {
+    return <AppTemplate>{children}</AppTemplate>;
+  }
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted px-4">

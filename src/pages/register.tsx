@@ -4,12 +4,12 @@ import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/lib/AuthContext';
 import { Label } from '@/components/ui/label';
-import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 import { motion } from 'framer-motion';
-import { Github } from 'lucide-react';
+import { Github, Mail } from 'lucide-react';
 
 import {
   Card,
@@ -20,66 +20,10 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { pathVariants } from '@/lib/utils';
+import { handleUnsupportedMethod } from '@/atoms/Toasts';
+import { toastVariants } from '@/atoms/Toasts';
 
-function RegisterV1() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { signUp } = useAuth();
-  const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    console.log('Registering user...');
-    e.preventDefault();
-    try {
-      await signUp(email, password);
-      console.log('User registered successfully');
-      toast.success(
-        'Registration successful! Please check your email to verify your account.'
-      );
-      router.push('/login');
-    } catch (error: any) {
-      console.error('Error registering user:', error);
-      toast.error(error.message);
-    }
-  };
-
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold mb-6">Register</h1>
-        <div className="mb-4">
-          <label className="block mb-2">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block mb-2">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-          Register
-        </button>
-      </form>
-    </div>
-  );
-}
-
-export default function RegisterV2() {
+export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -89,7 +33,7 @@ export default function RegisterV2() {
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setIsLoading(true);
-    
+
     try {
       const formData = new FormData(event.target as HTMLFormElement);
       const email = formData.get('email') as string;
@@ -102,7 +46,9 @@ export default function RegisterV2() {
       }
 
       await signUp(email, password);
-      toast.success('Registration successful! Please check your email to verify your account.');
+      toast.success(
+        'Registration successful! Please check your email to verify your account.'
+      );
       router.push('/login');
     } catch (error: any) {
       toast.error(error.message);
@@ -110,35 +56,6 @@ export default function RegisterV2() {
       setIsLoading(false);
     }
   }
-
-  const handleUnsupportedMethod = (method: string) => {
-    toast.custom((t) => (
-      <div
-        className={`${
-          t.visible ? 'animate-enter' : 'animate-leave'
-        } max-w-md w-full bg-[--color-bg-primary] shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
-        <div className="flex-1 w-0 p-4">
-          <div className="flex items-center">
-            <div className="ml-3 flex-1">
-              <p className="text-sm font-medium text-[--color-text-primary]">
-                Coming Soon!
-              </p>
-              <p className="mt-1 text-sm text-[--color-text-secondary]">
-                {method} sign in will be available soon.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="flex border-l border-[--color-text-secondary]/10">
-          <button
-            onClick={() => toast.dismiss(t.id)}
-            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-[--color-text-accent] hover:text-[--color-text-accent]/70 focus:outline-none">
-            Close
-          </button>
-        </div>
-      </div>
-    ));
-  };
 
   return (
     <div className="pt-20">
@@ -325,7 +242,11 @@ export default function RegisterV2() {
               variant="outline"
               className="w-full"
               disabled={isLoading}
-              onClick={() => handleUnsupportedMethod('GitHub')}>
+              onClick={() =>
+                handleUnsupportedMethod(
+                  toastVariants.handleUnsupportedMethod('GitHub')
+                )
+              }>
               <Github className="mr-2 h-4 w-4" />
               Github
             </Button>
@@ -333,7 +254,11 @@ export default function RegisterV2() {
               variant="outline"
               className="w-full"
               disabled={isLoading}
-              onClick={() => handleUnsupportedMethod('Email')}>
+              onClick={() =>
+                handleUnsupportedMethod(
+                  toastVariants.handleUnsupportedMethod('Email')
+                )
+              }>
               <Mail className="mr-2 h-4 w-4" />
               Email
             </Button>
