@@ -1,16 +1,10 @@
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/lib/AuthContext';
-import { AccountOverview } from '@/organisms/AccountOverview';
-import { ExpensesChart } from '@/organisms/ExpensesChart';
 import { ProfileForm } from '@/organisms/ProfileForm';
 import { SecurityForm } from '@/organisms/SecurityForm';
-import { TransactionList } from '@/organisms/TransactionList';
-import { UpcomingExpense } from '@/organisms/UpcomingExpense';
 import { PrivateRoute } from '@/templates/PrivateRoute';
-import { Pencil, Shield } from 'lucide-react';
 import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function Profile() {
@@ -51,10 +45,10 @@ export default function Profile() {
         </div>
         <Separator />
         <div className="flex flex-1 flex-col md:flex-row  gap-6 w-full">
-            <ProfileForm
-              onSecurityClick={() => toggleSecurityCard(true)}
-              isSecurityCardOpen={isSecurityCardOpen}
-            />
+          <ProfileForm
+            onSecurityClick={() => toggleSecurityCard(true)}
+            isSecurityCardOpen={isSecurityCardOpen}
+          />
           <AnimatePresence>
             {isSecurityCardOpen && (
               <SecurityForm onClose={() => toggleSecurityCard(false)} />
