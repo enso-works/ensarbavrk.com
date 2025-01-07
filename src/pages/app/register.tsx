@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { EnsoAnimatedButton } from '@/organisms/EnsoAnimatedButton';
 
 import { motion } from 'framer-motion';
 import { Github, Mail } from 'lucide-react';
@@ -221,9 +222,13 @@ export default function Register() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Creating account...' : 'Create account'}
-            </Button>
+            <EnsoAnimatedButton
+              type="submit"
+              className="w-full"
+              isLoading={isLoading}
+              loadingText="Creating account...">
+              Create account
+            </EnsoAnimatedButton>
           </form>
 
           <div className="relative my-6">

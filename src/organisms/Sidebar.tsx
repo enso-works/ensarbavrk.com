@@ -9,24 +9,29 @@ import {
   Settings,
   HelpCircle,
 } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useRouter } from 'next/navigation';
 
 export function Sidebar() {
+  const router = useRouter();
+
   return (
     <aside className="w-[60px] border-r bg-background flex flex-col items-center py-4 gap-4">
-      <div className="w-10 h-10 bg-rose-100 rounded-full flex items-center justify-center">
-        <span className="text-rose-500 font-bold text-sm ">EN</span>
-      </div>
+      <Avatar onClick={() => router.push('/app/profile')} className="h-10 w-10">
+        <AvatarImage src="/images/assets/static.png" alt="Profile picture" />
+        <AvatarFallback>EB</AvatarFallback>
+      </Avatar>
       <nav className="flex flex-col gap-4 items-center flex-1">
-        <Link href="/" className="p-2 rounded-lg bg-primary/5 text-primary">
+        <Link href="/app/dashboard" className="p-2 rounded-lg bg-primary/5 text-primary">
           <Home className="w-5 h-5" />
         </Link>
-        <Link href="/transactions" className="p-2 rounded-lg hover:bg-muted">
+        <Link href="/app/transactions" className="p-2 rounded-lg hover:bg-muted">
           <BarChart2 className="w-5 h-5 text-muted-foreground" />
         </Link>
-        <Link href="/payments" className="p-2 rounded-lg hover:bg-muted">
+        <Link href="/app/payments" className="p-2 rounded-lg hover:bg-muted">
           <Zap className="w-5 h-5 text-muted-foreground" />
         </Link>
-        <Link href="/messages" className="p-2 rounded-lg hover:bg-muted">
+        <Link href="/app/messages" className="p-2 rounded-lg hover:bg-muted">
           <MessageSquare className="w-5 h-5 text-muted-foreground" />
         </Link>
       </nav>

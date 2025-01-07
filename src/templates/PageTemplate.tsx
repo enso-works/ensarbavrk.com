@@ -9,7 +9,7 @@ import { Sidebar } from '@/organisms/Sidebar';
 import { AppHeader } from '@/organisms/AppHeader';
 
 const publicRoutes = ['/app/login', '/app/register', '/app/forgot-password'];
-const appRoutes = ['/app/dashboard'];
+const appRoutes = ['/app/dashboard', '/app/profile'];
 
 interface PageTemplateProps extends React.PropsWithChildren {}
 

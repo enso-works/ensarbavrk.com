@@ -17,6 +17,7 @@ import {
   CardFooter,
 } from '@/components/ui/card';
 import { pathVariants } from '@/lib/utils';
+import { EnsoAnimatedButton } from '@/organisms/EnsoAnimatedButton';
 
 export default function LoginV2() {
   const [isLoading, setIsLoading] = useState(false);
@@ -150,29 +151,14 @@ export default function LoginV2() {
                 </Button>
               </div>
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              <AnimatePresence mode="wait">
-                {isLoading ? (
-                  <motion.div
-                    key="loading"
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    className="flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Signing in</span>
-                  </motion.div>
-                ) : (
-                  <motion.span
-                    key="idle"
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}>
-                    Sign in
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </Button>
+            <EnsoAnimatedButton 
+              type="submit" 
+              className="w-full" 
+              isLoading={isLoading}
+              loadingText="Signing in"
+            >
+              Sign in
+            </EnsoAnimatedButton>
           </form>
 
           <div className="relative my-6">

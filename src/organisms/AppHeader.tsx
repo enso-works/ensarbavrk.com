@@ -22,12 +22,34 @@ import { toastVariants } from '@/atoms/Toasts';
 import { useToggleDarkMode } from '@/lib/useDarkMode';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChangeLightMode } from '@/molecules/ChangeLightMode';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 // Mock data for accounts - replace with your actual data structure
 const accounts = [{ id: 1, name: 'Personal account', isActive: true }];
 
 export function AppHeader() {
   const { isDarkMode, toggle } = useToggleDarkMode();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Get the current route name (after /app/)
+  const routeName = pathname.split('/').pop() || '';
+  
+  // Create breadcrumb display
+  const getBreadcrumb = () => {
+    if (routeName === 'profile' && searchParams.has('security')) {
+      return (
+        <span className="font-medium">
+          Profile / Security
+        </span>
+      );
+    }
+    return (
+      <span className="font-medium capitalize">
+        {routeName}
+      </span>
+    );
+  };
 
   return (
     <header className="h-16 border-b px-4 flex items-center gap-4">
@@ -68,7 +90,7 @@ export function AppHeader() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <span className="font-medium">Dashboard</span>
+        {getBreadcrumb()}
       </div>
       <div className="flex-1 flex items-center">
         <div className="relative max-w-md w-full">
