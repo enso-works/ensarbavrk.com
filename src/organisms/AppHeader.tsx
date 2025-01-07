@@ -3,11 +3,8 @@
 import {
   Search,
   Plus,
-  Moon,
   MessageSquare,
-  Phone,
   ChevronDown,
-  Sun,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

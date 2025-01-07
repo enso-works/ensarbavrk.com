@@ -8,14 +8,14 @@ import classNames from 'classnames';
 import { Sidebar } from '@/organisms/Sidebar';
 import { AppHeader } from '@/organisms/AppHeader';
 
-const publicRoutes = ['/login', '/register', '/forgot-password'];
-const appRoutes = ['/dashboard'];
+const publicRoutes = ['/app/login', '/app/register', '/app/forgot-password'];
+const appRoutes = ['/app/dashboard'];
 
 interface PageTemplateProps extends React.PropsWithChildren {}
 
 const AppTemplate = ({ children }: PageTemplateProps) => {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen w-full">
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <AppHeader />
@@ -32,7 +32,7 @@ export const PageTemplate = ({ children }: PageTemplateProps) => {
   useEffect(() => {
     if (!loading) {
       if (user && publicRoutes.includes(router.pathname)) {
-        router.replace('/dashboard');
+        router.replace('/app/dashboard');
         return;
       }
     }

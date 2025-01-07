@@ -43,7 +43,7 @@ input:autofill:active {
 }
 
 #__next {
-  @apply h-full flex flex-1 justify-center bg-bgPrimary;
+  @apply h-full flex flex-1 bg-bgPrimary;
 }
 
 .fixed-list {
