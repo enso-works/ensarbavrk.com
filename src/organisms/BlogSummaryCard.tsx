@@ -2,8 +2,8 @@ import * as React from 'react';
 import Image from 'next/image';
 import { H2, P, Small } from '@/atoms/Typography';
 import Link from 'next/link';
-import { CalendarDays, Clock, Eye } from 'lucide-react';
 import { PostWithViews } from '@/lib/postsApi';
+import { PostMeta } from '@/molecules/PostMeta';
 
 interface BlogSummaryCardV2Props {
   post: PostWithViews;
@@ -16,20 +16,9 @@ export const BlogSummaryCardV2: React.FC<BlogSummaryCardV2Props> = ({
     key={post.slug}
     href={`/posts/${post.slug}`}
     className="group block mb-8">
-    <article className="overflow-hidden rounded-lg bg-card transition-all hover:shadow-lg px-4 py-6">
+    <article className="overflow-hidden rounded-xl bg-card transition-all hover:shadow-lg p-8">
       <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-        <div className="flex items-center gap-1">
-          <CalendarDays className="w-4 h-4" />
-          <Small>{post.meta.publishedAt}</Small>
-        </div>
-        <div className="flex items-center gap-1">
-          <Clock className="w-4 h-4" />
-          <Small>{post.readingTime.time}</Small>
-        </div>
-        <div className="flex items-center gap-1">
-          <Eye className="w-4 h-4" />
-          <View views={post.views.views} />
-        </div>
+        <PostMeta postWithViews={post} />
       </div>
       <h3 className="text-2xl font-bold leading-tight mb-2 group-hover:text-primary transition-colors">
         {post.meta.title}
