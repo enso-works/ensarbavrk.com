@@ -12,7 +12,9 @@ export const NavBar = () => {
           <Signature />
         </Command.Link>
       </div>
-      <ChangeLightMode />
+      <div className={styles.button}>
+        <ChangeLightMode />
+      </div>
     </nav>
   );
 };

@@ -49,9 +49,10 @@ export const PageTemplate = ({ children }: PageTemplateProps) => {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted px-4">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted">
       <main
         className={classNames(
+          'px-4',
           { 'min-h-screen': isAuthPage },
           'max-w-[40.5rem] w-full justify-center p-8 max-sm:p-2'
         )}>
