@@ -103,7 +103,7 @@ export function ReactionColumn({
     }
   };
 
-  const handleReaction = async (reactionType: string) => {
+  const handleReaction = async (reactionType: 'like' | 'love' | 'laugh') => {
     const clientId = Cookies.get('reaction_client_id');
     if (!clientId) return;
 
