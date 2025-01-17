@@ -124,10 +124,10 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
 
   const supabase = getPrivateClient();
 
-  // Fetch initial reaction counts using raw count
+  // Fetch initial reaction counts
   const { data: reactionCounts } = await supabase
     .from('reactions')
-    .select('reaction_type, count', { count: 'exact' })
+    .select('reaction_type')
     .eq('slug', params.slug);
 
   const initialReactions: ReactionCounts = {

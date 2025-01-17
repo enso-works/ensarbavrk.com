@@ -19,9 +19,65 @@ export function ReactionColumn({
 }: ReactionColumnProps) {
   const [reactions, setReactions] = useState(initialReactions);
   const [userReactions, setUserReactions] = useState<Set<string>>(new Set());
-  const [animatingReaction, setAnimatingReaction] = useState<string | null>(null);
+  const [animatingReaction, setAnimatingReaction] = useState<string | null>(
+    null
+  );
 
-  console.log('reactions', reactions, 'SLUUGG', slug);
+  // Set up real-time subscription for reactions
+  useEffect(() => {
+    const channel = publicClient
+      .channel('reactions')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'reactions',
+          filter: `slug=eq.${slug}`,
+        },
+        () => {
+          fetchReactions();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      publicClient.removeChannel(channel);
+    };
+  }, [slug]);
+
+  // Update reactions when initialReactions changes
+  useEffect(() => {
+    setReactions(initialReactions);
+  }, [initialReactions]);
+
+  const fetchReactions = async () => {
+    try {
+      const { data: reactionCounts } = await publicClient
+        .from('reactions')
+        .select('reaction_type')
+        .eq('slug', slug);
+
+      const counts = {
+        like: 0,
+        love: 0,
+        laugh: 0,
+      };
+
+      if (reactionCounts) {
+        reactionCounts.forEach((item) => {
+          const type = item.reaction_type as keyof typeof counts;
+          if (counts[type] !== undefined) {
+            counts[type]++;
+          }
+        });
+      }
+
+      setReactions(counts);
+    } catch (error) {
+      console.error('Error fetching reactions:', error);
+    }
+  };
 
   // Generate or get client identifier
   useEffect(() => {
@@ -33,7 +89,7 @@ export function ReactionColumn({
 
     // Load user's previous reactions
     loadUserReactions(clientId);
-  }, []);
+  }, [slug]);
 
   const loadUserReactions = async (clientId: string) => {
     const { data } = await publicClient
@@ -55,32 +111,58 @@ export function ReactionColumn({
       setAnimatingReaction(reactionType);
       
       if (userReactions.has(reactionType)) {
+        // Optimistically update the UI
+        setReactions(prev => ({
+          ...prev,
+          [reactionType]: Math.max(0, prev[reactionType] - 1)
+        }));
+        setUserReactions(prev => {
+          const next = new Set(prev);
+          next.delete(reactionType);
+          return next;
+        });
+
+        // Then update the server
         await publicClient.from('reactions').delete().match({
           client_identifier: clientId,
           slug,
           reaction_type: reactionType,
         });
-
-        setUserReactions((prev) => {
+      } else {
+        // Optimistically update the UI
+        setReactions(prev => ({
+          ...prev,
+          [reactionType]: prev[reactionType] + 1
+        }));
+        setUserReactions(prev => {
           const next = new Set(prev);
-          next.delete(reactionType);
+          next.add(reactionType);
           return next;
         });
-      } else {
+
+        // Then update the server
         await publicClient.from('reactions').insert({
           client_identifier: clientId,
           slug,
           reaction_type: reactionType,
         });
-
-        setUserReactions((prev) => {
-          const next = new Set(prev);
-          next.add(reactionType);
-          return next;
-        });
       }
+
+      // Fetch the latest counts to ensure consistency
+      fetchReactions();
     } catch (error) {
       console.error('Error handling reaction:', error);
+      // Revert optimistic updates on error
+      fetchReactions();
+      setUserReactions(prev => {
+        const next = new Set(prev);
+        if (next.has(reactionType)) {
+          next.delete(reactionType);
+        } else {
+          next.add(reactionType);
+        }
+        return next;
+      });
     } finally {
       setTimeout(() => setAnimatingReaction(null), 1000);
     }
@@ -130,13 +212,13 @@ interface ReactionButtonProps {
   label: string;
 }
 
-function ReactionButton({ 
-  icon, 
-  count, 
-  onClick, 
-  active, 
+function ReactionButton({
+  icon,
+  count,
+  onClick,
+  active,
   isAnimating,
-  label 
+  label,
 }: ReactionButtonProps) {
   return (
     <motion.button
@@ -148,8 +230,7 @@ function ReactionButton({
             : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
         }`}
       whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
+      whileTap={{ scale: 0.95 }}>
       <AnimatePresence>
         {isAnimating && (
           <motion.div
@@ -164,16 +245,14 @@ function ReactionButton({
       <div className="relative">
         <motion.div
           animate={isAnimating ? { y: [-20, 0], scale: [1.2, 1] } : {}}
-          transition={{ type: "spring", stiffness: 300, damping: 15 }}
-        >
+          transition={{ type: 'spring', stiffness: 300, damping: 15 }}>
           {icon}
         </motion.div>
       </div>
-      <motion.span 
+      <motion.span
         className="text-sm font-medium"
         animate={isAnimating ? { scale: [1.2, 1] } : {}}
-        transition={{ type: "spring", stiffness: 300, damping: 15 }}
-      >
+        transition={{ type: 'spring', stiffness: 300, damping: 15 }}>
         {count}
       </motion.span>
       <span className="text-xs text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-5">
