@@ -32,25 +32,28 @@ export type Database = {
       }
       reactions: {
         Row: {
-          client_identifier: string
-          created_at: string
           id: string
-          reaction_type: string
           slug: string
+          like_count: number
+          love_count: number
+          laugh_count: number
+          created_at: string
         }
         Insert: {
-          client_identifier: string
-          created_at?: string
           id?: string
-          reaction_type: string
           slug: string
+          like_count?: number
+          love_count?: number
+          laugh_count?: number
+          created_at?: string
         }
         Update: {
-          client_identifier?: string
-          created_at?: string
           id?: string
-          reaction_type?: string
           slug?: string
+          like_count?: number
+          love_count?: number
+          laugh_count?: number
+          created_at?: string
         }
         Relationships: []
       }

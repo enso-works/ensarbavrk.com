@@ -125,24 +125,17 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   const supabase = getPrivateClient();
 
   // Fetch initial reaction counts
-  const { data: reactionCounts } = await supabase
+  const { data: reactionData } = await supabase
     .from('reactions')
-    .select('reaction_type')
-    .eq('slug', params.slug);
+    .select('like_count, love_count, laugh_count')
+    .eq('slug', params.slug)
+    .single();
 
   const initialReactions: ReactionCounts = {
-    like: 0,
-    love: 0,
-    laugh: 0,
+    like: reactionData?.like_count ?? 0,
+    love: reactionData?.love_count ?? 0,
+    laugh: reactionData?.laugh_count ?? 0,
   };
-
-  // Count reactions manually
-  reactionCounts?.forEach((item) => {
-    const type = item.reaction_type as keyof ReactionCounts;
-    if (initialReactions[type] !== undefined) {
-      initialReactions[type]++;
-    }
-  });
 
   const mdxSource = await serialize(post.content, {
     parseFrontmatter: true,

@@ -1,7 +1,6 @@
 import { ThumbsUp, Heart, Laugh } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { publicClient } from '@/lib/supabaseClient';
-import Cookies from 'js-cookie';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ReactionColumnProps {
@@ -18,10 +17,7 @@ export function ReactionColumn({
   reactions: initialReactions,
 }: ReactionColumnProps) {
   const [reactions, setReactions] = useState(initialReactions);
-  const [userReactions, setUserReactions] = useState<Set<string>>(new Set());
-  const [animatingReaction, setAnimatingReaction] = useState<string | null>(
-    null
-  );
+  const [animatingReaction, setAnimatingReaction] = useState<string | null>(null);
 
   // Set up real-time subscription for reactions
   useEffect(() => {
@@ -53,116 +49,46 @@ export function ReactionColumn({
 
   const fetchReactions = async () => {
     try {
-      const { data: reactionCounts } = await publicClient
+      const { data } = await publicClient
         .from('reactions')
-        .select('reaction_type')
-        .eq('slug', slug);
+        .select('like_count, love_count, laugh_count')
+        .eq('slug', slug)
+        .single();
 
-      const counts = {
-        like: 0,
-        love: 0,
-        laugh: 0,
-      };
-
-      if (reactionCounts) {
-        reactionCounts.forEach((item) => {
-          const type = item.reaction_type as keyof typeof counts;
-          if (counts[type] !== undefined) {
-            counts[type]++;
-          }
+      if (data) {
+        setReactions({
+          like: data.like_count,
+          love: data.love_count,
+          laugh: data.laugh_count,
         });
       }
-
-      setReactions(counts);
     } catch (error) {
       console.error('Error fetching reactions:', error);
     }
   };
 
-  // Generate or get client identifier
-  useEffect(() => {
-    let clientId = Cookies.get('reaction_client_id');
-    if (!clientId) {
-      clientId = crypto.randomUUID();
-      Cookies.set('reaction_client_id', clientId, { expires: 365 });
-    }
-
-    // Load user's previous reactions
-    loadUserReactions(clientId);
-  }, [slug]);
-
-  const loadUserReactions = async (clientId: string) => {
-    const { data } = await publicClient
-      .from('reactions')
-      .select('reaction_type')
-      .eq('slug', slug)
-      .eq('client_identifier', clientId);
-
-    if (data) {
-      setUserReactions(new Set(data.map((r) => r.reaction_type)));
-    }
-  };
-
   const handleReaction = async (reactionType: 'like' | 'love' | 'laugh') => {
-    const clientId = Cookies.get('reaction_client_id');
-    if (!clientId) return;
-
     try {
       setAnimatingReaction(reactionType);
       
-      if (userReactions.has(reactionType)) {
-        // Optimistically update the UI
-        setReactions(prev => ({
-          ...prev,
-          [reactionType]: Math.max(0, prev[reactionType] - 1)
-        }));
-        setUserReactions(prev => {
-          const next = new Set(prev);
-          next.delete(reactionType);
-          return next;
-        });
+      // Optimistically update UI
+      setReactions(prev => ({
+        ...prev,
+        [reactionType]: prev[reactionType] + 1
+      }));
 
-        // Then update the server
-        await publicClient.from('reactions').delete().match({
-          client_identifier: clientId,
-          slug,
-          reaction_type: reactionType,
-        });
-      } else {
-        // Optimistically update the UI
-        setReactions(prev => ({
-          ...prev,
-          [reactionType]: prev[reactionType] + 1
-        }));
-        setUserReactions(prev => {
-          const next = new Set(prev);
-          next.add(reactionType);
-          return next;
-        });
+      // Update the server
+      const columnName = `${reactionType}_count`;
+      const { error } = await publicClient.rpc('increment_reaction', {
+        post_slug: slug,
+        reaction_column: columnName
+      });
 
-        // Then update the server
-        await publicClient.from('reactions').insert({
-          client_identifier: clientId,
-          slug,
-          reaction_type: reactionType,
-        });
-      }
-
-      // Fetch the latest counts to ensure consistency
-      fetchReactions();
+      if (error) throw error;
     } catch (error) {
       console.error('Error handling reaction:', error);
-      // Revert optimistic updates on error
+      // Revert optimistic update on error
       fetchReactions();
-      setUserReactions(prev => {
-        const next = new Set(prev);
-        if (next.has(reactionType)) {
-          next.delete(reactionType);
-        } else {
-          next.add(reactionType);
-        }
-        return next;
-      });
     } finally {
       setTimeout(() => setAnimatingReaction(null), 1000);
     }
@@ -178,7 +104,6 @@ export function ReactionColumn({
           icon={<ThumbsUp className="w-5 h-5" />}
           count={reactions.like}
           onClick={() => handleReaction('like')}
-          active={userReactions.has('like')}
           isAnimating={animatingReaction === 'like'}
           label="Like"
         />
@@ -186,7 +111,6 @@ export function ReactionColumn({
           icon={<Heart className="w-5 h-5" />}
           count={reactions.love}
           onClick={() => handleReaction('love')}
-          active={userReactions.has('love')}
           isAnimating={animatingReaction === 'love'}
           label="Love"
         />
@@ -194,7 +118,6 @@ export function ReactionColumn({
           icon={<Laugh className="w-5 h-5" />}
           count={reactions.laugh}
           onClick={() => handleReaction('laugh')}
-          active={userReactions.has('laugh')}
           isAnimating={animatingReaction === 'laugh'}
           label="Laugh"
         />
@@ -207,7 +130,6 @@ interface ReactionButtonProps {
   icon: React.ReactNode;
   count: number;
   onClick: () => void;
-  active: boolean;
   isAnimating: boolean;
   label: string;
 }
@@ -216,7 +138,6 @@ function ReactionButton({
   icon,
   count,
   onClick,
-  active,
   isAnimating,
   label,
 }: ReactionButtonProps) {
@@ -224,11 +145,7 @@ function ReactionButton({
     <motion.button
       onClick={onClick}
       className={`group flex flex-col items-center gap-1 p-3 rounded-xl transition-colors relative
-        ${
-          active
-            ? 'text-blue-500 bg-blue-50 dark:bg-blue-900/30'
-            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
-        }`}
+        text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}>
       <AnimatePresence>
