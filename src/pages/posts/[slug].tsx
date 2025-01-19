@@ -54,26 +54,29 @@ export default function Post({
   }, [postWithViews.slug]);
 
   const fetchReactions = async () => {
-    const { data: reactionCounts } = await publicClient
-      .from('reactions')
-      .select('reaction_type, count', { count: 'exact' })
-      .eq('slug', postWithViews.slug);
+    try {
+      const { data } = await publicClient
+        .from('reactions')
+        .select('like_count, love_count, laugh_count')
+        .eq('slug', postWithViews.slug)
+        .single();
 
-    const counts: ReactionCounts = {
-      like: 0,
-      love: 0,
-      laugh: 0,
-    };
-
-    // Count reactions manually
-    reactionCounts?.forEach((item) => {
-      const type = item.reaction_type as keyof ReactionCounts;
-      if (counts[type] !== undefined) {
-        counts[type]++;
+      if (data) {
+        setReactions({
+          like: data.like_count ?? 0,
+          love: data.love_count ?? 0,
+          laugh: data.laugh_count ?? 0,
+        });
+      } else {
+        setReactions({
+          like: 0,
+          love: 0,
+          laugh: 0,
+        });
       }
-    });
-
-    setReactions(counts);
+    } catch (error) {
+      console.error('Error fetching reactions:', error);
+    }
   };
 
   return (
