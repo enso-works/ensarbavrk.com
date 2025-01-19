@@ -32,28 +32,28 @@ export type Database = {
       }
       reactions: {
         Row: {
-          id: string
-          slug: string
-          like_count: number
-          love_count: number
-          laugh_count: number
           created_at: string
+          id: string
+          laugh_count: number | null
+          like_count: number | null
+          love_count: number | null
+          slug: string
         }
         Insert: {
-          id?: string
-          slug: string
-          like_count?: number
-          love_count?: number
-          laugh_count?: number
           created_at?: string
+          id?: string
+          laugh_count?: number | null
+          like_count?: number | null
+          love_count?: number | null
+          slug: string
         }
         Update: {
-          id?: string
-          slug?: string
-          like_count?: number
-          love_count?: number
-          laugh_count?: number
           created_at?: string
+          id?: string
+          laugh_count?: number | null
+          like_count?: number | null
+          love_count?: number | null
+          slug?: string
         }
         Relationships: []
       }
@@ -62,6 +62,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      increment_reaction: {
+        Args: {
+          post_slug: string
+          reaction_column: string
+        }
+        Returns: undefined
+      }
       increment_views: {
         Args: {
           page_slug: string

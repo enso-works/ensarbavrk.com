@@ -6,9 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface ReactionColumnProps {
   slug: string;
   reactions: {
-    like: number;
-    love: number;
-    laugh: number;
+    like: number | null;
+    love: number | null;
+    laugh: number | null;
   };
 }
 
@@ -74,7 +74,7 @@ export function ReactionColumn({
       // Optimistically update UI
       setReactions(prev => ({
         ...prev,
-        [reactionType]: prev[reactionType] + 1
+        [reactionType]: (prev[reactionType] ?? 0) + 1
       }));
 
       // Update the server
@@ -128,7 +128,7 @@ export function ReactionColumn({
 
 interface ReactionButtonProps {
   icon: React.ReactNode;
-  count: number;
+  count: number | null;
   onClick: () => void;
   isAnimating: boolean;
   label: string;
@@ -170,7 +170,7 @@ function ReactionButton({
         className="text-sm font-medium"
         animate={isAnimating ? { scale: [1.2, 1] } : {}}
         transition={{ type: 'spring', stiffness: 300, damping: 15 }}>
-        {count}
+        {count ?? 0}
       </motion.span>
       <span className="text-xs text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-5">
         {label}
