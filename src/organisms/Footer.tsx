@@ -58,11 +58,6 @@ export const Footer = () => {
                   Spendings
                 </Link>
               </li>
-              <li>
-                <Link href="/app" className="hover:underline">
-                  Expense tracker
-                </Link>
-              </li>
             </ul>
           </nav>
         </div>
