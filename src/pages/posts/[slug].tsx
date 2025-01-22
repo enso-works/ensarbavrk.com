@@ -9,6 +9,10 @@ import { components } from '@/atoms/Typography';
 import { PostMeta } from '@/molecules/PostMeta';
 import { ReactionColumn } from '@/molecules/ReactionColumn';
 import { publicClient, getPrivateClient } from '@/lib/supabaseClient';
+import { useState } from 'react';
+import { useAuth } from '@/lib/AuthContext';
+import { toast } from 'react-hot-toast';
+import { CommunityComment } from '@/organisms/CommunityComment';
 
 interface PostProps {
   source: any;
@@ -79,6 +83,7 @@ export default function Post({
     }
   };
 
+
   return (
     <div className="flex flex-1 flex-col min-w-full items-center">
       <div className="flex flex-row justify-center max-w-[65rem] gap-8">
@@ -101,6 +106,7 @@ export default function Post({
           </div>
           <MDXRemote {...source} components={components} />
           <ReactionColumn slug={postWithViews.slug} reactions={reactions} />
+          <CommunityComment />
         </article>
       </div>
     </div>
