@@ -8,14 +8,16 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EnsoAnimatedButton } from '@/organisms/EnsoAnimatedButton';
+import { Textarea } from '@/components/ui/textarea';
 
 export function CommunityComment() {
   const [isLoading, setIsLoading] = useState(false);
+  const [comment, setComment] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user } = useAuth();
 
   async function handleLogin(event: React.FormEvent) {
     event.preventDefault();
@@ -61,6 +63,54 @@ export function CommunityComment() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  async function handleCommentSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    setIsLoading(true);
+
+    try {
+      // TODO: Implement comment submission to your backend
+      await submitComment(comment);
+      toast.success('Comment posted successfully!');
+      setComment('');
+    } catch (error: any) {
+      toast.error('Failed to post comment');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  if (user) {
+    return (
+      <Card className="p-6">
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Join the Conversation</h3>
+          <form onSubmit={handleCommentSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="comment">Your comment</Label>
+              <Textarea
+                id="comment"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Share your thoughts..."
+                required
+                disabled={isLoading}
+                className="min-h-[100px]"
+              />
+            </div>
+            <div className="flex justify-end">
+              <EnsoAnimatedButton
+                type="submit"
+                isLoading={isLoading}
+                loadingText="Posting...">
+                Post Comment
+              </EnsoAnimatedButton>
+            </div>
+          </form>
+        </div>
+      </Card>
+    );
   }
 
   return (
@@ -130,19 +180,30 @@ export function CommunityComment() {
                     </Button>
                   </div>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <EnsoAnimatedButton
                     type="submit"
                     isLoading={isLoading}
                     loadingText="Logging in...">
                     Log in
                   </EnsoAnimatedButton>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={() => setShowLoginForm(false)}>
-                    Cancel
-                  </Button>
+                  <div className="flex gap-4">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => {
+                        setShowLoginForm(false);
+                        setShowRegisterForm(true);
+                      }}>
+                      Create an account
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setShowLoginForm(false)}>
+                      Cancel
+                    </Button>
+                  </div>
                 </div>
               </form>
             </motion.div>
@@ -217,7 +278,7 @@ export function CommunityComment() {
                     </Button>
                   </div>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <EnsoAnimatedButton
                     type="submit"
                     isLoading={isLoading}
@@ -227,8 +288,11 @@ export function CommunityComment() {
                   <Button
                     type="button"
                     variant="ghost"
-                    onClick={() => setShowRegisterForm(false)}>
-                    Cancel
+                    onClick={() => {
+                      setShowRegisterForm(false);
+                      setShowLoginForm(true);
+                    }}>
+                    Already have an account?
                   </Button>
                 </div>
               </form>
@@ -242,4 +306,11 @@ export function CommunityComment() {
       </div>
     </Card>
   );
-} 
+}
+
+// Add this function to handle comment submission
+async function submitComment(comment: string) {
+  // TODO: Implement your comment submission logic here
+  // This should connect to your backend API
+  return Promise.resolve();
+}
