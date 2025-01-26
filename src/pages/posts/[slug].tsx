@@ -106,7 +106,7 @@ export default function Post({
           </div>
           <MDXRemote {...source} components={components} />
           <ReactionColumn slug={postWithViews.slug} reactions={reactions} />
-          <CommunityComment />
+          <CommunityComment slug={postWithViews.slug} />
         </article>
       </div>
     </div>

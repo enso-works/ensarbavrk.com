@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import { Label } from '@/components/ui/label';
 import { Eye, EyeOff } from 'lucide-react';
@@ -9,9 +9,15 @@ import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EnsoAnimatedButton } from '@/organisms/EnsoAnimatedButton';
 import { Textarea } from '@/components/ui/textarea';
+import { publicClient } from '@/lib/supabaseClient';
 
-export function CommunityComment() {
+interface CommunityCommentProps {
+  slug: string;
+}
+
+export function CommunityComment({ slug }: CommunityCommentProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [comments, setComments] = useState<any[]>([]);
   const [comment, setComment] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -70,14 +76,93 @@ export function CommunityComment() {
     setIsLoading(true);
 
     try {
-      // TODO: Implement comment submission to your backend
-      await submitComment(comment);
-      toast.success('Comment posted successfully!');
+      const { data, error } = await publicClient.from('comments').insert({
+        content: comment,
+        post_slug: slug,
+        user_id: user.id,
+      }).select(`
+        id,
+        content,
+        created_at,
+        profiles:user_id (id, username, avatar_url)
+      `).single();
+
+      if (error) throw error;
+
+      // Add the new comment to the existing comments
+      setComments(prevComments => [data, ...prevComments]);
       setComment('');
+      toast.success('Comment posted successfully!');
     } catch (error: any) {
+      console.log('ERROR ', error);
       toast.error('Failed to post comment');
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchComments();
+    
+    // Set up real-time subscription
+    const channel = publicClient.channel('comments')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'comments',
+          filter: `post_slug=eq.${slug}`,
+        },
+        () => {
+          fetchComments();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      publicClient.removeChannel(channel);
+    };
+  }, [slug]);
+
+  const fetchComments = async () => {
+    try {
+      const { data, error } = await publicClient
+    .from('comments')
+    .select(`
+        id,
+        content,
+        created_at,
+        profiles:user_id (id, username, avatar_url)
+    `);
+
+
+    console.log('Comments with user! ', data, 'err', error)
+     setComments(data || []);
+    } catch (error: any) {
+      console.log('HERE IS THE ERROR ', error);
+      toast.error('Failed to fetch comments');
+    }
+  };
+
+  // Update the display section
+  <span className="font-medium">
+    {comment?.profiles?.username?.split('@')[0]}
+  </span>
+
+  async function submitComment(comment: string) {
+    if (!user) return;
+     
+    try {
+      const { error } = await publicClient.from('comments').insert({
+        content: comment,
+        post_slug: slug,
+        user_id: user.id,
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      throw new Error(error.message);
     }
   }
 
@@ -85,7 +170,22 @@ export function CommunityComment() {
     return (
       <Card className="p-6">
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Join the Conversation</h3>
+          <h3 className="text-lg font-semibold">{user ? 'Comments' : 'Join the Conversation'}</h3>
+          <div className="space-y-6">
+            {comments.map((comment) => (
+              <div key={comment.id} className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">
+                    {comment?.profiles?.username?.split('@')[0]}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {new Date(comment.created_at).toLocaleDateString()}
+                  </span>
+                </div>
+                <p className="text-sm">{comment.content}</p>
+              </div>
+            ))}
+          </div>
           <form onSubmit={handleCommentSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="comment">Your comment</Label>

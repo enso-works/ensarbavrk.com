@@ -50,9 +50,14 @@ export const Footer = () => {
           <p>&copy; Wathever year it is | Enso.</p>
           <nav className="mt-4 md:mt-0">
             <ul className="flex space-x-4">
-                <Link href="/" className="hover:underline">
-                  Home
+              <Link href="/" className="hover:underline">
+                Home
+              </Link>
+              <li>
+                <Link href="/thoughts" className="hover:underline">
+                  Thoughts
                 </Link>
+              </li>
               <li>
                 <Link href="/spendings" className="hover:underline">
                   Spendings
