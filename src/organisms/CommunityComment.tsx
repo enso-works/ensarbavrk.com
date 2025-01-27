@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { EnsoAnimatedButton } from '@/organisms/EnsoAnimatedButton';
 import { Textarea } from '@/components/ui/textarea';
 import { publicClient } from '@/lib/supabaseClient';
+import { commentService } from '@/services/commentService';
 
 interface CommunityCommentProps {
   slug: string;
@@ -74,22 +75,8 @@ export function CommunityComment({ slug }: CommunityCommentProps) {
   async function handleCommentSubmit(event: React.FormEvent) {
     event.preventDefault();
     setIsLoading(true);
-
     try {
-      const { data, error } = await publicClient.from('comments').insert({
-        content: comment,
-        post_slug: slug,
-        user_id: user.id,
-      }).select(`
-        id,
-        content,
-        created_at,
-        profiles:user_id (id, username, avatar_url)
-      `).single();
-
-      if (error) throw error;
-
-      // Add the new comment to the existing comments
+      const data = await commentService.createComment(comment, slug, user.id);
       setComments(prevComments => [data, ...prevComments]);
       setComment('');
       toast.success('Comment posted successfully!');
@@ -103,23 +90,7 @@ export function CommunityComment({ slug }: CommunityCommentProps) {
 
   useEffect(() => {
     fetchComments();
-    
-    // Set up real-time subscription
-    const channel = publicClient.channel('comments')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'comments',
-          filter: `post_slug=eq.${slug}`,
-        },
-        () => {
-          fetchComments();
-        }
-      )
-      .subscribe();
-
+    const channel = commentService.subscribeToComments(slug, fetchComments);
     return () => {
       publicClient.removeChannel(channel);
     };
@@ -127,18 +98,8 @@ export function CommunityComment({ slug }: CommunityCommentProps) {
 
   const fetchComments = async () => {
     try {
-      const { data, error } = await publicClient
-    .from('comments')
-    .select(`
-        id,
-        content,
-        created_at,
-        profiles:user_id (id, username, avatar_url)
-    `);
-
-
-    console.log('Comments with user! ', data, 'err', error)
-     setComments(data || []);
+      const data = await commentService.fetchComments(slug);
+      setComments(data || []);
     } catch (error: any) {
       console.log('HERE IS THE ERROR ', error);
       toast.error('Failed to fetch comments');
@@ -149,22 +110,6 @@ export function CommunityComment({ slug }: CommunityCommentProps) {
   <span className="font-medium">
     {comment?.profiles?.username?.split('@')[0]}
   </span>
-
-  async function submitComment(comment: string) {
-    if (!user) return;
-     
-    try {
-      const { error } = await publicClient.from('comments').insert({
-        content: comment,
-        post_slug: slug,
-        user_id: user.id,
-      });
-
-      if (error) throw error;
-    } catch (error: any) {
-      throw new Error(error.message);
-    }
-  }
 
   if (user) {
     return (
@@ -406,11 +351,4 @@ export function CommunityComment({ slug }: CommunityCommentProps) {
       </div>
     </Card>
   );
-}
-
-// Add this function to handle comment submission
-async function submitComment(comment: string) {
-  // TODO: Implement your comment submission logic here
-  // This should connect to your backend API
-  return Promise.resolve();
 }
