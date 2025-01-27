@@ -25,7 +25,7 @@ export default function Home({ posts }: { posts: PostWithViews[] }) {
       
 
       <div className="mt-9">
-        <BlogPageHeading />
+        <BlogPageHeading className='px-4' />
         <ul className={'mb-9 '}>
           {posts.map((post) => {
             return (

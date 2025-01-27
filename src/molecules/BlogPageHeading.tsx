@@ -1,11 +1,18 @@
 import * as React from 'react';
 import { H1 } from '@/atoms/Typography';
+import classNames from 'classnames';
 
-export const BlogPageHeading = ({}) => {
+interface BlogPageHeadingProps {
+  firstLine?: string;
+  secondLine?: string;
+  className?: string;
+}
+
+export const BlogPageHeading = ({ firstLine = 'Recent', secondLine = 'writings', className }: BlogPageHeadingProps) => {
   return (
-    <H1 className="mb-9 px-4">
-      Recent
-      <br /> writings<span className="text-primary">.</span>
+    <H1 className={classNames('mb-9', className)}>
+      {firstLine}
+      <br /> {secondLine}<span className="text-primary">.</span>
     </H1>
   );
 };
