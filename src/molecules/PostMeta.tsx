@@ -8,6 +8,7 @@ export const PostMeta = ({
 }: {
   postWithViews: PostWithViews;
 }) => {
+  console.log(postWithViews);
   return (
     <div className="max-w-[800px] flex items-center gap-4 text-sm text-muted-foreground">
       <div className="flex items-center gap-1">
@@ -20,7 +21,7 @@ export const PostMeta = ({
       </div>
       <div className="flex items-center gap-1">
         <Eye className="h-4 w-4" />
-        <span>{postWithViews.views.views.toLocaleString()} views</span>
+        <span>{postWithViews?.views?.views?.toLocaleString()} views</span>
       </div>
     </div>
   );

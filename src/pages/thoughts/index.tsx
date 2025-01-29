@@ -10,9 +10,18 @@ export default function FreeThoughts({ posts }: { posts: PostWithViews[] }) {
     <div>
       <Head>
         <title>💭 Free Thoughts - Enso&apos;s digital garden</title>
-        <meta name="description" content="A stream of consciousness, random ideas, and unfiltered thoughts from Enso's mind to yours." />
-        <meta property="og:title" content="💭 Free Thoughts - Enso's digital garden" />
-        <meta property="og:description" content="A stream of consciousness, random ideas, and unfiltered thoughts from Enso's mind to yours." />
+        <meta
+          name="description"
+          content="A stream of consciousness, random ideas, and unfiltered thoughts from Enso's mind to yours."
+        />
+        <meta
+          property="og:title"
+          content="💭 Free Thoughts - Enso's digital garden"
+        />
+        <meta
+          property="og:description"
+          content="A stream of consciousness, random ideas, and unfiltered thoughts from Enso's mind to yours."
+        />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <link rel="icon" href="/favicon.ico" />
@@ -22,7 +31,7 @@ export default function FreeThoughts({ posts }: { posts: PostWithViews[] }) {
         <div className="relative mb-16">
           <div className="relative  dark:bg-gray-900 flex items-top justify-start space-x-6 p-8">
             <div className="space-y-4">
-             <BlogPageHeading firstLine='Free' secondLine='Thoughts' />     
+              <BlogPageHeading firstLine="Free" secondLine="Thoughts" />
               <p className="text-muted-foreground text-lg">
                 A collection of unfiltered thoughts and ideas.
                 <span className="block mt-2 text-sm">
@@ -44,7 +53,7 @@ export default function FreeThoughts({ posts }: { posts: PostWithViews[] }) {
 }
 
 export async function getStaticProps() {
-  const posts = getAllPosts('thoughts'); // We'll add this parameter to getAllPosts
+  const posts = getAllPosts('./src/content/thoughts');
   const data = await getViewCountForAllPosts();
 
   const mappedPosts = posts.map((post) => {

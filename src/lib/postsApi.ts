@@ -29,15 +29,26 @@ export interface PostWithViews extends Post {
   views: { views: number };
 }
 
-const postsDirectory = join(process.cwd(), './src/content');
+const DEFAULT_POSTS_DIRECTORY = './src/content';
 
-export const getSlugs = (): string[] =>
-  sync(`${postsDirectory}/*.mdx`).map(
+const getContentDir = (
+  contentDir: string = DEFAULT_POSTS_DIRECTORY
+): string => {
+  return join(process.cwd(), contentDir);
+};
+
+export const getSlugs = (
+  contentDir: string = DEFAULT_POSTS_DIRECTORY
+): string[] =>
+  sync(`${getContentDir(contentDir)}/*.mdx`).map(
     (path) => path.split('/').slice(-1).join('').split('.')[0]
   );
 
-export const postFromSlug = (slug: string): Post => {
-  const postPath = path.join(postsDirectory, `${slug}.mdx`);
+export const postFromSlug = (
+  slug: string,
+  contentDir: string = DEFAULT_POSTS_DIRECTORY
+): Post => {
+  const postPath = path.join(getContentDir(contentDir), `${slug}.mdx`);
   const { data, content } = matter(fs.readFileSync(postPath, 'utf8'));
   const readingTimeStats = readingTime(content);
 
@@ -52,5 +63,6 @@ export const postFromSlug = (slug: string): Post => {
   };
 };
 
-export const getAllPosts = (): Post[] =>
-  getSlugs().map((slug) => postFromSlug(slug));
+export const getAllPosts = (
+  contentDir: string = DEFAULT_POSTS_DIRECTORY
+): Post[] => getSlugs(contentDir).map((slug) => postFromSlug(slug, contentDir));
