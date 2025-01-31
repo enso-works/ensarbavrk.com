@@ -7,14 +7,18 @@ import { PostMeta } from '@/molecules/PostMeta';
 
 interface BlogSummaryCardV2Props {
   post: PostWithViews;
+  navLink?: string;
 }
 
 export const BlogSummaryCardV2: React.FC<BlogSummaryCardV2Props> = ({
   post,
-}: BlogSummaryCardV2Props) => (
+  navLink
+}: BlogSummaryCardV2Props) =>{
+  const href =  navLink ? navLink: `/posts/${post.slug}`
+  return(
   <Link
     key={post.slug}
-    href={`/posts/${post.slug}`}
+    href={href}
     className="group block mb-8">
     <article className="overflow-hidden rounded-xl bg-card transition-all hover:shadow-lg p-8">
       <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
@@ -26,7 +30,7 @@ export const BlogSummaryCardV2: React.FC<BlogSummaryCardV2Props> = ({
       <p className="text-muted-foreground">{post.meta.summary}</p>
     </article>
   </Link>
-);
+)}
 
 export const BlogSummaryCard: React.FC<BlogSummaryCardV2Props> = ({ post }) => {
   return (

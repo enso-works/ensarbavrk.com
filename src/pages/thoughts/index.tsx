@@ -3,7 +3,6 @@ import { getAllPosts, PostWithViews } from '@/lib/postsApi';
 import { getViewCountForAllPosts } from '@/lib/viewCount';
 import { BlogSummaryCardV2 } from '@/organisms/BlogSummaryCard';
 import { BlogPageHeading } from '@/molecules/BlogPageHeading';
-import { log } from 'console';
 
 export default function FreeThoughts({ posts }: { posts: PostWithViews[] }) {
   return (
@@ -43,7 +42,7 @@ export default function FreeThoughts({ posts }: { posts: PostWithViews[] }) {
         </div>
         <ul className="mb-9">
           {posts.map((post) => (
-            <BlogSummaryCardV2 key={post.meta.title} post={post} />
+            <BlogSummaryCardV2 navLink={`/thoughts/${post.slug}`}  key={post.meta.title} post={post} />
           ))}
         </ul>
       </div>
@@ -55,18 +54,11 @@ export async function getStaticProps() {
   const posts = getAllPosts('./src/content/thoughts');
   const data = await getViewCountForAllPosts();
 
-  console.log('DAATA VIEW', data)
-
   const mappedPosts = posts.map((post) => {
-
     const foundView = data?.length ? data.find((view) => view.slug.includes(post.slug)) : null;
     const views = foundView || { views: 0, slug: post.slug };
-
-
     return { ...post, views };
   });
-
-  console.log(mappedPosts, 'HERE')
 
   return {
     props: {

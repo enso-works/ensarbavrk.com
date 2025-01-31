@@ -9,9 +9,6 @@ import { components } from '@/atoms/Typography';
 import { PostMeta } from '@/molecules/PostMeta';
 import { ReactionColumn } from '@/molecules/ReactionColumn';
 import { publicClient, getPrivateClient } from '@/lib/supabaseClient';
-import { useState } from 'react';
-import { useAuth } from '@/lib/AuthContext';
-import { toast } from 'react-hot-toast';
 import { CommunityComment } from '@/organisms/CommunityComment';
 
 interface PostProps {
@@ -35,7 +32,6 @@ export default function Post({
     React.useState<ReactionCounts>(initialReactions);
 
   React.useEffect(() => {
-    // Set up real-time subscription for reactions
     const channel = publicClient
       .channel('reactions')
       .on(
@@ -113,8 +109,10 @@ export default function Post({
   );
 }
 
+const contentDir = './src/content/thoughts';
+
 export async function getStaticPaths() {
-  const slugs = getSlugs();
+  const slugs = getSlugs(contentDir);
 
   const paths = slugs.map((slug) => ({
     params: { slug },
@@ -127,13 +125,12 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
-  const post = postFromSlug(params.slug);
-  const data = await getViewCount(`/posts/${params.slug}`);
-  const postWithViews = { ...post, views: { views: data[0]?.views } };
+  const post = postFromSlug(params.slug, contentDir);
+  const data = await getViewCount(`/thoughts/${params.slug}`);
+  const postWithViews = { ...post, views: { views: data[0]?.views || 0 } };
 
   const supabase = getPrivateClient();
 
-  // Fetch initial reaction counts
   const { data: reactionData } = await supabase
     .from('reactions')
     .select('like_count, love_count, laugh_count')
