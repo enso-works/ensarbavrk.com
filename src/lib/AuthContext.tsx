@@ -62,7 +62,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signOut = async () => {
     const { error } = await publicClient.auth.signOut();
     if (error) throw error;
-    router.push('/login');
   };
 
   useEffect(() => {

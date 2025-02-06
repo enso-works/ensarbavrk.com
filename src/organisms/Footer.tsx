@@ -1,10 +1,21 @@
-import { CalendarDays, Clock, Eye, Github, X, Linkedin } from 'lucide-react';
+import { CalendarDays, Clock, Eye, Github, X, Linkedin, LogOut } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/lib/AuthContext';
 
 export const Footer = () => {
+  const { user, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
   return (
     <footer className="mt-24 w-full bg-gray-100 dark:bg-gray-800">
       <div className="max-w-[40.5rem] mx-auto px-4 py-12">
@@ -49,7 +60,7 @@ export const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
           <p>&copy; Wathever year it is | Enso.</p>
           <nav className="mt-4 md:mt-0">
-            <ul className="flex space-x-4">
+            <ul className="flex items-center space-x-4">
               <Link href="/" className="hover:underline">
                 Home
               </Link>
@@ -63,6 +74,18 @@ export const Footer = () => {
                   Spendings
                 </Link>
               </li>
+              {user && (
+                <li>
+                  <Button 
+                    variant="secondary"
+                    onClick={handleLogout}
+                    className="flex items-center gap-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Logout
+                  </Button>
+                </li>
+              )}
             </ul>
           </nav>
         </div>
